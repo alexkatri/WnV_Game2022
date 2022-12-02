@@ -1,16 +1,16 @@
 ﻿  classes.cpp
-D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(48,26): warning C4584: 'Werewolve': base-class 'Element' is already a base-class of 'Player'
+D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(58,26): warning C4584: 'Werewolve': base-class 'Element' is already a base-class of 'Player'
 D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(13): message : see declaration of 'Element'
-D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(40): message : see declaration of 'Player'
-D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(56,24): warning C4584: 'Vampire': base-class 'Element' is already a base-class of 'Player'
+D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(50): message : see declaration of 'Player'
+D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(66,24): warning C4584: 'Vampire': base-class 'Element' is already a base-class of 'Player'
 D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(13): message : see declaration of 'Element'
-D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(40): message : see declaration of 'Player'
+D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(50): message : see declaration of 'Player'
   main.cpp
-D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(48,26): warning C4584: 'Werewolve': base-class 'Element' is already a base-class of 'Player'
+D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(58,26): warning C4584: 'Werewolve': base-class 'Element' is already a base-class of 'Player'
 D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(13): message : see declaration of 'Element'
-D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(40): message : see declaration of 'Player'
-D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(56,24): warning C4584: 'Vampire': base-class 'Element' is already a base-class of 'Player'
+D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(50): message : see declaration of 'Player'
+D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(66,24): warning C4584: 'Vampire': base-class 'Element' is already a base-class of 'Player'
 D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(13): message : see declaration of 'Element'
-D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(40): message : see declaration of 'Player'
+D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\classes.h(50): message : see declaration of 'Player'
   Generating Code...
   Ergasia solution.vcxproj -> D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\Ergasia solution\x64\Debug\Ergasia solution.exe

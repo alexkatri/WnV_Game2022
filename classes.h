@@ -15,7 +15,7 @@ class Element {
 	char symbol;
 public:
 	void set_point(const Point&);
-	void set_symbol(char);
+	virtual void set_symbol(char);
 	char get_symbol() const;
 	Element(const Point&, const char);
 	Element();
@@ -35,6 +35,16 @@ public:
 	}
 	*/
 
+};
+
+class Tree : public Element {
+public:
+	Tree();
+};
+
+class Lake : public Element {
+public:
+	Lake();
 };
 
 class Player : public Element {
@@ -85,10 +95,16 @@ public:
 	Board(unsigned short int);
 	Board();
 	~Board();
+	int get_size() const;
 	void display() const;
 };
 
 class State {
 	Board board;
+	unsigned short int num_of_trees;
+	unsigned short int num_of_lakes;
 	//bool day;
+public:
+	State(Board&, int, int);
+	void initialize();
 };

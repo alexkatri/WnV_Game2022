@@ -11,6 +11,7 @@ int main() {
 	cout << "Give board size..." << endl;
 	cin >> size;
 	Board b = Board(size);
+
 	
 	bool exit = false;
 	while (!exit) {

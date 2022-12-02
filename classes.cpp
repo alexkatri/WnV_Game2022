@@ -24,6 +24,14 @@ char Element::get_symbol() const {
 }
 
 
+Tree::Tree() {
+	void set_symbol(char c = 'T');
+}
+
+Lake::Lake() {
+	void set_symbol(char c = 'O');
+}
+
 /////////////////////////////////// class Player
 Player::Player(const Point& p, const char c) {
 	Element::set_point(p);
@@ -45,6 +53,9 @@ Board::~Board() {
 	}
 	delete[] board;
 }
+int Board::get_size() const {
+	return size;
+}
 void Board::display() const {
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
@@ -53,5 +64,7 @@ void Board::display() const {
 		cout << endl;
 	}
 }
+
+State::State(Board& b, int x, int y) : board(b), num_of_trees(x), num_of_lakes(y) {};
 
 
