@@ -1,17 +1,94 @@
 #pragma once
 
-struct Point;
+using namespace std;
 
-class Element;
+struct Point {
+	unsigned short int x;
+	unsigned short int y;
+public:
+	Point(unsigned short int, unsigned short int);
+	Point() {};
+};
 
-class Player;
+class Element {
+	Point point;
+	char symbol;
+public:
+	void set_point(const Point&);
+	void set_symbol(char);
+	char get_symbol() const;
+	Element(const Point&, const char);
+	Element();
 
-class Werewolve;
+	/*
+	void move_up() {
+		point.y++;
+	}
+	void move_down() {
+		point.y--;
+	}
+	void move_right() {
+		point.x++;
+	}
+	void move_left() {
+		point.x--;
+	}
+	*/
 
-class Vampire;
+};
+
+class Player : public Element {
+	unsigned short int power;
+	unsigned short int health;
+public:
+	virtual void attack() {};
+	Player(const Point&, const char);
+};
+
+class Werewolve : public Player, public Element {
+public:
+	//void attack();
+	//	void set_symbol() {
+	//		symbol = 'W';
+	//	}
+};
+
+class Vampire : public Player, public Element {
+public:
+	//void attack();
+	/*
+	void move_NW() {
+		move_up();
+		move_left();
+	}
+	void move_NE() {
+		move_up();
+		move_right();
+	}
+	void move_SW() {
+		move_down();
+		move_left();
+	}
+	void move_SE() {
+		move_down();
+		move_right();
+	}
+	*/
+};
 
 class Avatar;
 
-class Board;
+class Board {
+	Element** board;
+	unsigned short int size;
+public:
+	Board(unsigned short int);
+	Board();
+	~Board();
+	void display() const;
+};
 
-class State;
+class State {
+	Board board;
+	//bool day;
+};

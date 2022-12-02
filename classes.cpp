@@ -1,113 +1,57 @@
+#include <iostream>
+#include "classes.h"
+
+using namespace std;
+
+//////////////////////////////////// class Point
+Point::Point(unsigned short int a, unsigned short int b) : x(a), y(b) {};
 
 
-struct Point {
-	unsigned short int x;
-	unsigned short int y;
 
-public:
-	Point(unsigned short int a, unsigned short int b) : x(a), y(b) {};
+/////////////////////////////////// class Element
+Element::Element(const Point& p, const char c) : point(p), symbol(c) {};
+Element::Element() {
+	symbol = '.';
+}
+void Element::set_point(const Point& p) {
+	point = p;
+}
+void Element::set_symbol(char c = '.') {
+	symbol = c;
+}
+char Element::get_symbol() const {
+	return symbol;
+}
+
+
+/////////////////////////////////// class Player
+Player::Player(const Point& p, const char c) {
+	Element::set_point(p);
+	Element::set_symbol(c);
 };
 
 
-class Element {
-	Point point;
-	//	char symbol;
 
-public:
-	void set_point(const Point& p) {
-		point = p;
+////////////////////////////// class Board
+Board::Board(unsigned short int n) : size(n) {
+	board = new Element*[n];
+	for (int i = 0; i < n; i++) {
+		board[i] = new Element[n];
 	}
-	/*
-	void move_up() {
-		point.y++;
+}
+Board::~Board() {
+	for (int i = 0; i < size; i++) {
+		delete[] board[i];
 	}
-	void move_down() {
-		point.y--;
-	}
-	void move_right() {
-		point.x++;
-	}
-	void move_left() {
-		point.x--;
-	}
-	*/
-	Element(const Point& p) : point(p) {};
-	//	virtual void set_symbol() = 0;
-};
-
-class Player : Element {
-
-private:
-	unsigned short int power;
-	unsigned short int health;
-
-public:
-	virtual void attack() {};
-	Player(const Point& p) {
-		set_point(p);
-	};
-	//	void set_symbol() {
-	//		symbol = '.';
-	//	};
-
-};
-
-class Werewolve : public Player, public Element {
-
-public:
-	void attack() {};
-	//	void set_symbol() {
-	//		symbol = 'W';
-	//	}
-};
-
-class Vampire : public Player, public Element {
-
-public:
-	void attack() {};
-	/*
-	void move_NW() {
-		move_up();
-		move_left();
-	}
-	void move_NE() {
-		move_up();
-		move_right();
-	}
-	void move_SW() {
-		move_down();
-		move_left();
-	}
-	void move_SE() {
-		move_down();
-		move_right();
-	}
-	*/
-};
-
-class Board {
-	Player** board;
-	unsigned short int size;
-
-public:
-	Board(unsigned short int n) : size(n) {
-		board = new Player * [n];
-		for (int i = 0; i < n; i++) {
-			board[i] = new Player[n];
+	delete[] board;
+}
+void Board::display() const {
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			cout << board[i][j].get_symbol() << " ";
 		}
-	};
-
-	~Board() {
-		for (int i = 0; i < size; i++) {
-			delete[] board[i];
-		}
-		delete[] board;
+		cout << endl;
 	}
+}
 
-};
 
-class State {
-	Board board;
-	bool day;
-
-};
