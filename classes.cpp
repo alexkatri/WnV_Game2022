@@ -23,16 +23,10 @@ void Element::set_empty(bool b) {
 	empty = b;
 }
 bool Element::is_empty() const {
-	if (empty != NULL) {
-		return empty;
-	}
-	return NULL;
+	return empty;
 }
 char Element::get_symbol() const {
-	if (symbol != NULL) {
-		return symbol;
-	}
-	return NULL;
+	return symbol;
 }
 
 
@@ -86,10 +80,7 @@ int Board::get_size() const {
 	return size;
 }
 Element* Board::at(int x, int y) {
-	if (board[x][y] != NULL) {
-		return board[x][y];
-	}
-	return NULL;
+	return board[x][y];
 }
 void Board::display() const {
 	for (int i = 0; i < size; i++) {
@@ -102,8 +93,6 @@ void Board::display() const {
 void Board::push(int x, int y, Element* element) {
 	delete board[x][y];
 	board[x][y] = element;
-	//board[x][y]->set_symbol(element->get_symbol());
-	//board[x][y]->set_empty(false);
 }
 
 
