@@ -99,9 +99,11 @@ void Board::display() const {
 		cout << endl;
 	}
 }
-void Board::push(int x, int y, const Element* element) {
-	board[x][y]->set_symbol(element->get_symbol());
-	board[x][y]->set_empty(false);
+void Board::push(int x, int y, Element* element) {
+	delete board[x][y];
+	board[x][y] = element;
+	//board[x][y]->set_symbol(element->get_symbol());
+	//board[x][y]->set_empty(false);
 }
 
 
@@ -116,17 +118,16 @@ Board State::get_board() const {
 }
 void State::initialize() {
 	srand((unsigned)time(NULL));
-	int* x = new int;
-	int* y = new int;
+	int x;
+	int y;
 	for (int i = 0; i < num_of_trees; i++) {
 		bool exit = false;
 		while (!exit) {
-			*x = rand() % (board.get_size());
-			*y = rand() % (board.get_size());
-			if (board.at(*x, *y)->is_empty()) {	// h thesi tou board einai kenh
-			//if (board.at(a,b)->get_symbol() == '.') {
-				Tree* tree = new Tree(*x, *y);
-				board.push(*x, *y, tree);
+			x = rand() % (board.get_size());
+			y = rand() % (board.get_size());
+			if (board.at(x, y)->is_empty()) {	// h thesi tou board einai kenh
+				Tree* tree = new Tree(x, y);
+				board.push(x, y, tree);
 				exit = true;
 			}
 		}
@@ -134,16 +135,14 @@ void State::initialize() {
 	for (int i = 0; i < num_of_lakes; i++) {
 		bool exit = false;
 		while (!exit) {
-			*x = rand() % (board.get_size());
-			*y = rand() % (board.get_size());
-			if (board.at(*x, *y)->is_empty()) {	// h thesi tou board einai kenh	
-				Lake* lake = new Lake(*x, *y);
-				board.push(*x, *y, lake);
+			x = rand() % (board.get_size());
+			y = rand() % (board.get_size());
+			if (board.at(x, y)->is_empty()) {	// h thesi tou board einai kenh	
+				Lake* lake = new Lake(x, y);
+				board.push(x, y, lake);
 				exit = true;
 			}
 		}
 	}
-	delete x;
-	delete y;
 }
 

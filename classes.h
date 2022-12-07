@@ -106,7 +106,7 @@ public:
 	//~Board();
 	int get_size() const;
 	Element* at(int, int);
-	void push(int, int, const Element*);
+	void push(int, int, Element*);
 	void display() const;
 };
 
