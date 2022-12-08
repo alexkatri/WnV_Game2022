@@ -105,7 +105,12 @@ public:
 	*/
 };
 
-class Avatar;
+class Avatar : public Player {
+
+public:
+	Avatar(int, int);
+	Avatar();
+};
 
 class Board {
 	unsigned short int size = 10;

@@ -89,6 +89,10 @@ Werewolve::Werewolve() : Player() {};
 Vampire::Vampire(int x, int y) : Player(x, y, 'v') {};
 Vampire::Vampire() : Player() {};
 
+//////////////////////////////// class Avatar
+Avatar::Avatar(int x, int y) : Player(x, y, 'A') {};
+Avatar::Avatar() : Player() {};
+
 
 
 ////////////////////////////// class Board
@@ -149,6 +153,10 @@ void State::initialize() {
 	srand((unsigned)time(NULL));
 	int x;
 	int y;
+	x = rand() % (board.get_size());
+	y = rand() % (board.get_size());
+	Avatar* avatar = new Avatar(x, y);
+	board.push(x, y, avatar);
 	for (int i = 0; i < num_of_warewolves; i++) {
 		bool exit = false;
 		while (!exit) {
