@@ -58,23 +58,33 @@ public:
 
 class Player : public Element {
 	unsigned short int power;
-	unsigned short int health;
+	unsigned short int health = 10;
 public:
-	virtual void attack() {};
 	Player(const Point&, const char);
+	Player(int, int, const char);
+	Player();
+	int get_health() const;
+	int get_power() const;
+	void attack(Player*);
+	void health_decrease();
+	void health_increase();
+	void move_up();
+	void move_down();
+	void move_right();
+	void move_left();
 };
 
-class Werewolve : public Player, public Element {
+class Werewolve : public Player {
 public:
-	//void attack();
-	//	void set_symbol() {
-	//		symbol = 'W';
-	//	}
+	Werewolve(int, int);
+	Werewolve();
 };
 
-class Vampire : public Player, public Element {
+class Vampire : public Player {
 public:
-	//void attack();
+	Vampire(int, int);
+	Vampire();
+
 	/*
 	void move_NW() {
 		move_up();
@@ -115,9 +125,11 @@ protected:
 	Board board;
 	unsigned short int num_of_trees;
 	unsigned short int num_of_lakes;
+	int num_of_warewolves;
+	int num_of_vampires;
 	//bool day;
 public:
-	State(Board&, int, int);
+	State(Board&, int, int, int, int);
 	State(Board&);
 	Board get_board() const;
 	void initialize();

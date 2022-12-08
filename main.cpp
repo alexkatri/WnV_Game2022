@@ -17,9 +17,10 @@ int main() {
 	Board b = Board(size);
 	//// Providing a seed value
 	//srand((unsigned)time(NULL));
-	int num_of_trees = size;
-	int num_of_lakes = size / 2;
-	State state = State(b, num_of_trees, num_of_lakes);
+	int num_of_trees = size / 2;
+	int num_of_lakes = size / 4;
+	int num_of_players = size * size / 15;
+	State state = State(b, num_of_trees, num_of_lakes, num_of_players, num_of_players);
 	state.initialize();
 	
 	bool exit = false;

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-//////////////////////////////////// class Point
+//////////////////////////////////// struct Point
 Point::Point(unsigned short int a, unsigned short int b) : x(a), y(b) {};
 
 
@@ -30,6 +30,7 @@ char Element::get_symbol() const {
 }
 
 
+/////////////////////////////////////// classes Tree & Lake
 Tree::Tree() : Element() {
 	set_symbol('T');
 }
@@ -45,7 +46,48 @@ Lake::Lake(int x, int y) : Element(x, y, 'O') {};
 
 
 /////////////////////////////////// class Player
-Player::Player(const Point& p, const char c) : Element(p, c) {};
+Player::Player(const Point& p, const char c) : Element(p, c), health(10) {};
+Player::Player(int x, int y, const char c) : Element(x, y, c), health(10) {};
+Player::Player() : Element(), health(10) {
+	set_symbol('P');
+}
+int Player::get_health() const {
+	return health;
+}
+int Player::get_power() const {
+	return power;
+}
+void Player::health_decrease() {
+	--health;
+}
+void Player::health_increase() {
+	++health;
+}
+void Player::attack(Player* p) {
+	p->health_decrease();
+}
+void Player::move_up() {
+	++point.y;
+}
+void Player::move_down() {
+	--point.y;
+}
+void Player::move_right() {
+	++point.x;
+}
+void Player::move_left() {
+	--point.x;
+}
+
+
+
+//////////////////////////////// class Werewolve
+Werewolve::Werewolve(int x, int y) : Player(x, y, 'w') {};
+Werewolve::Werewolve() : Player() {};
+
+//////////////////////////////// class Vampire
+Vampire::Vampire(int x, int y) : Player(x, y, 'v') {};
+Vampire::Vampire() : Player() {};
 
 
 
@@ -56,7 +98,6 @@ Board::Board(unsigned short int n) : size(n) {
 		board[i] = new Element*[n];
 		for (int j = 0; j < n; j++) {
 			board[i][j] = new Element(i, j, '.');
-			cout << board[i][j]->is_empty() << " ";
 		}
 	}
 }
@@ -66,7 +107,6 @@ Board::Board() {
 		board[i] = new Element*[size];
 		for (int j = 0; j < size; j++) {
 			board[i][j] = new Element(i, j, '.');
-			cout << board[i][j]->is_empty() << " ";
 		}
 	}
 }
@@ -100,8 +140,8 @@ void Board::push(int x, int y, Element* element) {
 
 
 /////////////////////////////////////////////////
-State::State(Board& b, int x, int y) : board(b), num_of_trees(x), num_of_lakes(y) {};
-State::State(Board& b) : board(b), num_of_trees(0), num_of_lakes(0) {};
+State::State(Board& b, int x, int y, int w, int v) : board(b), num_of_trees(x), num_of_lakes(y), num_of_warewolves(w), num_of_vampires(v) {};
+State::State(Board& b) : board(b), num_of_trees(0), num_of_lakes(0), num_of_warewolves(0), num_of_vampires(0) {};
 Board State::get_board() const {
 	return board;
 }
@@ -109,6 +149,30 @@ void State::initialize() {
 	srand((unsigned)time(NULL));
 	int x;
 	int y;
+	for (int i = 0; i < num_of_warewolves; i++) {
+		bool exit = false;
+		while (!exit) {
+			x = rand() % (board.get_size());
+			y = rand() % (board.get_size());
+			if (board.at(x, y)->is_empty()) {	// h thesi tou board einai kenh
+				Werewolve* werewolve = new Werewolve(x, y);
+				board.push(x, y, werewolve);
+				exit = true;
+			}
+		}
+	}
+	for (int i = 0; i < num_of_vampires; i++) {
+		bool exit = false;
+		while (!exit) {
+			x = rand() % (board.get_size());
+			y = rand() % (board.get_size());
+			if (board.at(x, y)->is_empty()) {	// h thesi tou board einai kenh
+				Vampire* vampire = new Vampire(x, y);
+				board.push(x, y, vampire);
+				exit = true;
+			}
+		}
+	}
 	for (int i = 0; i < num_of_trees; i++) {
 		bool exit = false;
 		while (!exit) {
