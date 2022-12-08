@@ -24,22 +24,6 @@ public:
 	void set_empty(bool);
 	char get_symbol() const;
 	bool is_empty() const;
-
-	/*
-	void move_up() {
-		point.y++;
-	}
-	void move_down() {
-		point.y--;
-	}
-	void move_right() {
-		point.x++;
-	}
-	void move_left() {
-		point.x--;
-	}
-	*/
-
 };
 
 class Tree : public Element {
@@ -106,10 +90,19 @@ public:
 };
 
 class Avatar : public Player {
-
+protected:
+	int num_of_magic_filters = 1;
 public:
 	Avatar(int, int);
 	Avatar();
+	int get_num_of_magic_filters() const;
+};
+
+class Magic_filter : public Element {
+public:
+	Magic_filter(const Point&);
+	Magic_filter(int, int);
+	Magic_filter();
 };
 
 class Board {
@@ -128,14 +121,17 @@ public:
 class State {
 protected:
 	Board board;
+	Avatar avatar;
 	unsigned short int num_of_trees;
 	unsigned short int num_of_lakes;
-	int num_of_warewolves;
+	int num_of_werewolves;
 	int num_of_vampires;
 	//bool day;
 public:
 	State(Board&, int, int, int, int);
 	State(Board&);
 	Board get_board() const;
+	int get_num_of_werewolves() const;
+	int get_num_of_vampires() const;
 	void initialize();
 };

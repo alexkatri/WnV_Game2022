@@ -16,7 +16,7 @@ Element::Element() : point(0, 0), symbol('.'), empty(true) {};
 void Element::set_point(const Point& p) {
 	point = p;
 }
-void Element::set_symbol(char c = '.') {
+void Element::set_symbol(char c) {
 	symbol = c;
 }
 void Element::set_empty(bool b) {
@@ -30,7 +30,7 @@ char Element::get_symbol() const {
 }
 
 
-/////////////////////////////////////// classes Tree & Lake
+/////////////////////////////////////// classes Tree, Lake, Magic_filter
 Tree::Tree() : Element() {
 	set_symbol('T');
 }
@@ -42,6 +42,11 @@ Lake::Lake() : Element() {
 }
 Lake::Lake(const Point& p) : Element(p, 'O') {};
 Lake::Lake(int x, int y) : Element(x, y, 'O') {};
+Magic_filter::Magic_filter() : Element() {
+	set_symbol('$');
+}
+Magic_filter::Magic_filter(const Point& p) : Element(p, '$') {};
+Magic_filter::Magic_filter(int x, int y) : Element(x, y, '$') {};
 
 
 
@@ -92,6 +97,9 @@ Vampire::Vampire() : Player() {};
 //////////////////////////////// class Avatar
 Avatar::Avatar(int x, int y) : Player(x, y, 'A') {};
 Avatar::Avatar() : Player() {};
+int Avatar::get_num_of_magic_filters() const {
+	return num_of_magic_filters;
+}
 
 
 
@@ -129,7 +137,7 @@ Element* Board::at(int x, int y) {
 void Board::display() const {
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
-			cout << board[i][j]->get_symbol() << " ";
+			cout << board[i][j]->get_symbol() << "  ";
 		}
 		cout << endl;
 	}
@@ -144,20 +152,32 @@ void Board::push(int x, int y, Element* element) {
 
 
 /////////////////////////////////////////////////
-State::State(Board& b, int x, int y, int w, int v) : board(b), num_of_trees(x), num_of_lakes(y), num_of_warewolves(w), num_of_vampires(v) {};
-State::State(Board& b) : board(b), num_of_trees(0), num_of_lakes(0), num_of_warewolves(0), num_of_vampires(0) {};
+State::State(Board& b, int x, int y, int w, int v) : board(b), num_of_trees(x), num_of_lakes(y), num_of_werewolves(w), num_of_vampires(v) {};
+State::State(Board& b) : board(b), num_of_trees(0), num_of_lakes(0), num_of_werewolves(0), num_of_vampires(0) {};
 Board State::get_board() const {
 	return board;
+}
+int State::get_num_of_werewolves() const {
+	return num_of_werewolves;
+}
+int State::get_num_of_vampires() const {
+	return num_of_vampires;
 }
 void State::initialize() {
 	srand((unsigned)time(NULL));
 	int x;
 	int y;
-	x = rand() % (board.get_size());
-	y = rand() % (board.get_size());
-	Avatar* avatar = new Avatar(x, y);
-	board.push(x, y, avatar);
-	for (int i = 0; i < num_of_warewolves; i++) {
+	bool exit = false;
+	while (!exit) {
+		x = rand() % (board.get_size());
+		y = rand() % (board.get_size());
+		if (board.at(x, y)->is_empty()) {	// h thesi tou board einai kenh
+			Magic_filter* magic_filter = new Magic_filter(x, y);
+			board.push(x, y, magic_filter);
+			exit = true;
+		}
+	}
+	for (int i = 0; i < num_of_werewolves; i++) {
 		bool exit = false;
 		while (!exit) {
 			x = rand() % (board.get_size());
