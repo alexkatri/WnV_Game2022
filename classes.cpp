@@ -141,6 +141,7 @@ void Board::display() const {
 		}
 		cout << endl;
 	}
+	cout << endl << endl;
 }
 void Board::push(int x, int y, Element* element) {
 	delete board[x][y];
@@ -162,6 +163,12 @@ int State::get_num_of_werewolves() const {
 }
 int State::get_num_of_vampires() const {
 	return num_of_vampires;
+}
+string State::get_timer() const {
+	return timer;
+}
+void State::change_timer(string s) {
+	timer = s;
 }
 void State::initialize() {
 	srand((unsigned)time(NULL));

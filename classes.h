@@ -126,12 +126,14 @@ protected:
 	unsigned short int num_of_lakes;
 	int num_of_werewolves;
 	int num_of_vampires;
-	//bool day;
+	string timer = "day";
 public:
 	State(Board&, int, int, int, int);
 	State(Board&);
 	Board get_board() const;
 	int get_num_of_werewolves() const;
 	int get_num_of_vampires() const;
+	string get_timer() const;
+	void change_timer(string);
 	void initialize();
 };
