@@ -5,7 +5,7 @@
 using namespace std;
 
 //////////////////////////////////// struct Point
-Point::Point(unsigned short int a, unsigned short int b) : x(a), y(b) {};
+Point::Point(int a, int b) : x(a), y(b) {};
 
 
 
@@ -51,10 +51,15 @@ Magic_filter::Magic_filter(int x, int y) : Element(x, y, '$') {};
 
 
 /////////////////////////////////// class Player
-Player::Player(const Point& p, const char c) : Element(p, c), health(10) {};
-Player::Player(int x, int y, const char c) : Element(x, y, c), health(10) {};
-Player::Player() : Element(), health(10) {
+Player::Player(const Point& p, const char c) : Element(p, c) {
+	this->initialize();
+};
+Player::Player(int x, int y, const char c) : Element(x, y, c) {
+	this->initialize();
+};
+Player::Player() : Element() {
 	set_symbol('P');
+	this->initialize();
 }
 int Player::get_health() const {
 	return health;
@@ -62,14 +67,40 @@ int Player::get_health() const {
 int Player::get_power() const {
 	return power;
 }
-void Player::health_decrease() {
-	--health;
+int Player::get_first_aid_kit() const {
+	return first_aid_kit;
+}
+void Player::set_first_aid_kit(int n) {
+	first_aid_kit = n;
+}
+void Player::initialize() {
+	srand((unsigned)time(NULL));
+
+	int x = rand() % 4;
+	while (x == 0) {
+		x = rand() % 4;
+	}
+	power = x;
+
+	int y = rand() % 3;
+	while (y == 0) {
+		y = rand() % 3;
+	}
+	defence = y;
+
+	first_aid_kit = rand() % 3;
+}
+void Player::health_decrease(Player* attacker, Player* defender) {
+	defender->health -= attacker->power - defender->defence;
 }
 void Player::health_increase() {
 	++health;
 }
 void Player::attack(Player* p) {
-	p->health_decrease();
+	p->health_decrease(this, p);
+}
+void Player::heal(Player* p) {
+	p->health_increase();
 }
 void Player::move_up() {
 	++point.y;
@@ -99,6 +130,9 @@ Avatar::Avatar(int x, int y) : Player(x, y, 'A') {};
 Avatar::Avatar() : Player() {};
 int Avatar::get_num_of_magic_filters() const {
 	return num_of_magic_filters;
+}
+void Avatar::increase_magic_filters() {
+	++num_of_magic_filters;
 }
 
 
@@ -146,6 +180,7 @@ void Board::display() const {
 void Board::push(int x, int y, Element* element) {
 	delete board[x][y];
 	board[x][y] = element;
+	board[x][y]->set_empty(false);
 }
 
 
@@ -172,6 +207,7 @@ void State::change_timer(string s) {
 }
 void State::initialize() {
 	srand((unsigned)time(NULL));
+
 	int x;
 	int y;
 	bool exit = false;
@@ -184,6 +220,7 @@ void State::initialize() {
 			exit = true;
 		}
 	}
+
 	for (int i = 0; i < num_of_werewolves; i++) {
 		bool exit = false;
 		while (!exit) {
@@ -191,11 +228,13 @@ void State::initialize() {
 			y = rand() % (board.get_size());
 			if (board.at(x, y)->is_empty()) {	// h thesi tou board einai kenh
 				Werewolve* werewolve = new Werewolve(x, y);
+				//werewolve->initialize();
 				board.push(x, y, werewolve);
 				exit = true;
 			}
 		}
 	}
+
 	for (int i = 0; i < num_of_vampires; i++) {
 		bool exit = false;
 		while (!exit) {
@@ -203,11 +242,13 @@ void State::initialize() {
 			y = rand() % (board.get_size());
 			if (board.at(x, y)->is_empty()) {	// h thesi tou board einai kenh
 				Vampire* vampire = new Vampire(x, y);
+				//vampire->initialize();
 				board.push(x, y, vampire);
 				exit = true;
 			}
 		}
 	}
+
 	for (int i = 0; i < num_of_trees; i++) {
 		bool exit = false;
 		while (!exit) {
@@ -220,6 +261,7 @@ void State::initialize() {
 			}
 		}
 	}
+
 	for (int i = 0; i < num_of_lakes; i++) {
 		bool exit = false;
 		while (!exit) {

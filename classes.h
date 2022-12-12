@@ -4,9 +4,9 @@
 using namespace std;
 
 struct Point {
-	unsigned short int x = 0;
-	unsigned short int y = 0;
-	Point(unsigned short int, unsigned short int);
+	int x = 0;
+	int y = 0;
+	Point(int, int);
 	Point() {};
 };
 
@@ -41,16 +41,23 @@ public:
 };
 
 class Player : public Element {
-	unsigned short int power;
-	unsigned short int health = 10;
+	int power = 0;
+	int defence = 0;
+	int health = 10;
+	int first_aid_kit = 0;
 public:
 	Player(const Point&, const char);
 	Player(int, int, const char);
 	Player();
 	int get_health() const;
 	int get_power() const;
+	int get_first_aid_kit() const;
+	void set_power();
+	void set_first_aid_kit(int);
+	void initialize();
 	void attack(Player*);
-	void health_decrease();
+	void heal(Player*);
+	void health_decrease(Player*, Player*);
 	void health_increase();
 	void move_up();
 	void move_down();
@@ -96,6 +103,7 @@ public:
 	Avatar(int, int);
 	Avatar();
 	int get_num_of_magic_filters() const;
+	void increase_magic_filters();
 };
 
 class Magic_filter : public Element {
@@ -106,8 +114,8 @@ public:
 };
 
 class Board {
-	unsigned short int size = 10;
-	Element*** board = new Element**;
+	int size = 10;
+	Element*** board;
 public:
 	Board(unsigned short int);
 	Board();
@@ -122,8 +130,8 @@ class State {
 protected:
 	Board board;
 	Avatar avatar;
-	unsigned short int num_of_trees;
-	unsigned short int num_of_lakes;
+	int num_of_trees;
+	int num_of_lakes;
 	int num_of_werewolves;
 	int num_of_vampires;
 	string timer = "day";
