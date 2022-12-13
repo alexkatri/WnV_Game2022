@@ -22,6 +22,7 @@ public:
 	void set_point(const Point&);
 	void set_symbol(char);
 	void set_empty(bool);
+	Point get_point() const;
 	char get_symbol() const;
 	bool is_empty() const;
 };
@@ -38,6 +39,13 @@ public:
 	Lake(const Point&);
 	Lake(int, int);
 	Lake();
+};
+
+class Magic_filter : public Element {
+public:
+	Magic_filter(const Point&);
+	Magic_filter(int, int);
+	Magic_filter();
 };
 
 class Player : public Element {
@@ -106,13 +114,6 @@ public:
 	void increase_magic_filters();
 };
 
-class Magic_filter : public Element {
-public:
-	Magic_filter(const Point&);
-	Magic_filter(int, int);
-	Magic_filter();
-};
-
 class Board {
 	int size = 10;
 	Element*** board;
@@ -124,6 +125,7 @@ public:
 	Element* at(int, int);
 	void push(int, int, Element*);
 	void display() const;
+	bool legal_move(Point*);
 };
 
 class State {

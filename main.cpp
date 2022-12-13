@@ -13,8 +13,9 @@ using namespace chrono_literals; // for the time pace
 
 int main() {
 	unsigned short int size;
-	cout << "Give board size..." << endl;
+	cout << "Give board size...\n";
 	cin >> size;
+	cout << endl;
 	Board b = Board(size);
 
 	// Dhmiourgia tou state
@@ -29,7 +30,7 @@ int main() {
 	int x = rand() % (b.get_size());
 	int y = rand() % (b.get_size());
 	Avatar* avatar = new Avatar(x, y);
-	cout << "Choose your team...?\n";
+	cout << "Choose your team...\n";
 	cout << "Press 'w' for werewolves or 'v' for vampires...\n";
 	char ch;
 	cin >> ch;
@@ -67,7 +68,9 @@ int main() {
 		// print board
 		system("cls");
 		state.get_board().display();
-		cout << "Time = " << state.get_timer();
+		cout << "Time = " << state.get_timer() << endl << endl;
+		cout << "Press 'SPACE' for pause\n";
+		cout << "Press '0' for exit\n";
 
 
 		// Elegxos tou plhktrologiou

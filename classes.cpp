@@ -22,11 +22,14 @@ void Element::set_symbol(char c) {
 void Element::set_empty(bool b) {
 	empty = b;
 }
-bool Element::is_empty() const {
-	return empty;
+Point Element::get_point() const {
+	return point;
 }
 char Element::get_symbol() const {
 	return symbol;
+}
+bool Element::is_empty() const {
+	return empty;
 }
 
 
@@ -182,6 +185,19 @@ void Board::push(int x, int y, Element* element) {
 	board[x][y] = element;
 	board[x][y]->set_empty(false);
 }
+bool Board::legal_move(Point* p) {
+	// Point p is out of board
+	if (p->x < 0 || p->x >= size || p->y < 0 || p->y >= size) {
+		return false;
+	}
+	// Point p is inside the board
+	else {
+		if (board[p->x][p->y]->get_symbol() == '.') {
+			return true;
+		}
+	}
+}
+
 
 
 
@@ -275,4 +291,3 @@ void State::initialize() {
 		}
 	}
 }
-
