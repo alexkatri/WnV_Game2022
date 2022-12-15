@@ -1,5 +1,6 @@
 #pragma once
-#include <string.h>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -131,12 +132,14 @@ public:
 class State {
 protected:
 	Board board;
-	Avatar avatar;
+	Avatar* avatar;
 	int num_of_trees;
 	int num_of_lakes;
 	int num_of_werewolves;
 	int num_of_vampires;
 	string timer = "day";
+	vector <Werewolve*> werewolves_vector;
+	vector <Vampire*> vampires_vector;
 public:
 	State(Board&, int, int, int, int);
 	State(Board&);
@@ -144,6 +147,8 @@ public:
 	int get_num_of_werewolves() const;
 	int get_num_of_vampires() const;
 	string get_timer() const;
+	void set_board(Board);
+	void set_avatar(Avatar*);
 	void change_timer(string);
 	void initialize();
 };

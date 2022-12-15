@@ -1,2 +1,7 @@
-﻿  main.cpp
+﻿  board.cpp
+  classes.cpp
+  main.cpp
+  state.cpp
+  Generating Code...
+D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\board.cpp(64): warning C4715: 'Board::legal_move': not all control paths return a value
   Ergasia solution.vcxproj -> D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\Ergasia solution\x64\Debug\Ergasia solution.exe

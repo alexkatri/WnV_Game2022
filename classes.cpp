@@ -55,14 +55,14 @@ Magic_filter::Magic_filter(int x, int y) : Element(x, y, '$') {};
 
 /////////////////////////////////// class Player
 Player::Player(const Point& p, const char c) : Element(p, c) {
-	this->initialize();
+	initialize();
 };
 Player::Player(int x, int y, const char c) : Element(x, y, c) {
-	this->initialize();
+	initialize();
 };
 Player::Player() : Element() {
 	set_symbol('P');
-	this->initialize();
+	initialize();
 }
 int Player::get_health() const {
 	return health;

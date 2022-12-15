@@ -19,6 +19,12 @@ int State::get_num_of_vampires() const {
 string State::get_timer() const {
 	return timer;
 }
+void State::set_board(Board B) {
+	board = B;
+}
+void State::set_avatar(Avatar* A) {
+	avatar = A;
+}
 void State::change_timer(string s) {
 	timer = s;
 }
@@ -45,8 +51,8 @@ void State::initialize() {
 			y = rand() % (board.get_size());
 			if (board.at(x, y)->is_empty()) {	// h thesi tou board einai kenh
 				Werewolve* werewolve = new Werewolve(x, y);
-				//werewolve->initialize();
 				board.push(x, y, werewolve);
+				werewolves_vector.push_back(werewolve);
 				exit = true;
 			}
 		}
@@ -59,8 +65,8 @@ void State::initialize() {
 			y = rand() % (board.get_size());
 			if (board.at(x, y)->is_empty()) {	// h thesi tou board einai kenh
 				Vampire* vampire = new Vampire(x, y);
-				//vampire->initialize();
 				board.push(x, y, vampire);
+				vampires_vector.push_back(vampire);
 				exit = true;
 			}
 		}

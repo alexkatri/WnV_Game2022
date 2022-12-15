@@ -33,13 +33,6 @@ int main() {
 	Board b = Board(size);
 
 
-	// Dhmiourgia tou state
-	int num_of_trees = size / 2;
-	int num_of_lakes = size / 4;
-	int num_of_players = size * size / 15;
-	State state = State(b, num_of_trees, num_of_lakes, num_of_players, num_of_players);
-	
-
 	// Dhmiourgia tou avatar
 	srand((unsigned)time(NULL));		// Providing a seed value
 	int x = rand() % (b.get_size());
@@ -70,9 +63,16 @@ int main() {
 	b.push(x, y, avatar);
 
 
-	// Dhmiourgia twn ontothtwn tou board
-	state.initialize();
+	// Dhmiourgia tou state
+	int num_of_trees = size / 2;
+	int num_of_lakes = size / 4;
+	int num_of_players = size * size / 15;
+	State state = State(b, num_of_trees, num_of_lakes, num_of_players, num_of_players);	
+	state.set_board(b);
+	state.set_avatar(avatar);
+	state.initialize();		// Dhmiourgia twn ontothtwn tou board
 	
+
 
 	bool exit = false;
 	bool pause = false;
