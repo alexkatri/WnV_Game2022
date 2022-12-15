@@ -96,13 +96,13 @@ int main() {
 		// Elegxos gia gameover
 		if (state.get_num_of_werewolves() == 0) {
 			system("cls");
-			this_thread::sleep_for(200ms);
+			this_thread::sleep_for(1s);
 			cout << "GAME OVER...\n\n" << "VAMPIRES WIN !!!\n\n";
 			exit = true;
 		}
 		if (state.get_num_of_vampires() == 0) {
 			system("cls");
-			this_thread::sleep_for(200ms);
+			this_thread::sleep_for(1s);
 			cout << "GAME OVER...\n\n" << "WEREWOLVES WIN !!!\n\n";
 			exit = true;
 		}
