@@ -12,11 +12,26 @@ using namespace chrono_literals; // for the time pace
 
 
 int main() {
+	
+	// Dhmiourgia tou board
 	unsigned short int size;
-	cout << "Give board size...\n";
-	cin >> size;
+	cout << "Give board size... (10 - 20)\n";
+	bool valid = false;
+	while (!valid) {
+		try {
+			cin >> size;
+			if (size < 10 || size > 20) {
+				throw(invalid_argument("Not valid size... Input must be between 10 and 20"));
+			}
+			valid = true;
+		}
+		catch (invalid_argument& inpt) {
+			cerr << inpt.what() << endl;
+		}
+	}
 	cout << endl;
 	Board b = Board(size);
+
 
 	// Dhmiourgia tou state
 	int num_of_trees = size / 2;
@@ -33,7 +48,19 @@ int main() {
 	cout << "Choose your team...\n";
 	cout << "Press 'w' for werewolves or 'v' for vampires...\n";
 	char ch;
-	cin >> ch;
+	valid = false;
+	while (!valid) {
+		try {
+			cin >> ch;
+			if (ch != 'w' && ch != 'v') {
+				throw(invalid_argument("Not valid argument... Input must be either 'w' or 'v'"));
+			}
+			valid = true;
+		}
+		catch (invalid_argument& inpt) {
+			cerr << inpt.what() << endl;
+		}
+	}
 	if (ch == 'w') {
 		avatar->set_symbol('W');
 	}

@@ -1,9 +1,2 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1118,5): warning MSB8027: Two or more files with the name of board.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are ..\..\board.cpp, board.cpp.
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1118,5): warning MSB8027: Two or more files with the name of state.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are ..\..\state.cpp, state.cpp.
-  board.cpp
-  classes.cpp
-  state.cpp
-  board.cpp
-  Generating Code...
-D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\board.cpp(64): warning C4715: 'Board::legal_move': not all control paths return a value
+﻿  main.cpp
   Ergasia solution.vcxproj -> D:\Αντικειμενοστραφής Προγραμματισμός\ergasia_github\Ergasia solution\x64\Debug\Ergasia solution.exe
