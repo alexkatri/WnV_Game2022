@@ -25,7 +25,7 @@ public:
 	void set_empty(bool);
 	Point get_point() const;
 	char get_symbol() const;
-	bool is_empty() const;
+	bool is_empty() const;			// Epistrefei true an to stoixeio tou board einai keno
 };
 
 class Tree : public Element {
@@ -60,12 +60,13 @@ public:
 	Player();
 	int get_health() const;
 	int get_power() const;
+	int get_defence() const;
 	int get_first_aid_kit() const;
 	void set_power();
 	void set_first_aid_kit(int);
-	void initialize();
-	void attack(Player*);
-	void heal(Player*);
+	void initialize();				// Arxikopoiei ta epipeda power, defence kai first_aid_kit me tyxaies times
+	void attack(Player*);			// Gia antipalo paixth
+	void heal(Player*);				// Gia sympaixth
 	void health_decrease(Player*, Player*);
 	void health_increase();
 	void move_up();
@@ -113,18 +114,19 @@ public:
 	Avatar();
 	int get_num_of_magic_filters() const;
 	void increase_magic_filters();
+	void decrease_magic_filters();
 };
 
 class Board {
 	int size = 10;
-	Element*** board;
+	Element*** board;				// Didiastato array apo Element*
 public:
 	Board(unsigned short int);
 	Board();
 	//~Board();
 	int get_size() const;
-	Element* at(int, int);
-	void push(int, int, Element*);
+	Element* at(int, int);			// Epistrefei to stoixeio tou board sth thesh (x, y)
+	void push(int, int, Element*);	// Eisagei ena stoixeio sth thesh (x, y) tou board
 	void display() const;
 	bool legal_move(Point*);
 };
@@ -141,14 +143,16 @@ protected:
 	vector <Werewolve*> werewolves_vector;
 	vector <Vampire*> vampires_vector;
 public:
-	State(Board&, int, int, int, int);
+	State(Board&, Avatar*, int, int, int, int);
 	State(Board&);
 	Board get_board() const;
+	Avatar* get_avatar() const;
 	int get_num_of_werewolves() const;
 	int get_num_of_vampires() const;
 	string get_timer() const;
 	void set_board(Board);
 	void set_avatar(Avatar*);
-	void change_timer(string);
-	void initialize();
+	void change_timer(string);			// Allazei th mera h th nyxta
+	void initialize();					// Dhmiourgei tis ontothtes tou board tyxaia
+	void team_heal(char);				// Epoulwnei ola ta melh ths omadas tou Avatar
 };

@@ -40,7 +40,7 @@ int main() {
 	Avatar* avatar = new Avatar(x, y);
 	cout << "Choose your team...\n";
 	cout << "Press 'w' for werewolves or 'v' for vampires...\n";
-	char ch;
+	char ch;				// Exei to xarakthra 'w' h 'v' analoga me thn omada pou uposrthrizei o avatar
 	valid = false;
 	while (!valid) {
 		try {
@@ -67,9 +67,7 @@ int main() {
 	int num_of_trees = size / 2;
 	int num_of_lakes = size / 4;
 	int num_of_players = size * size / 15;
-	State state = State(b, num_of_trees, num_of_lakes, num_of_players, num_of_players);	
-	state.set_board(b);
-	state.set_avatar(avatar);
+	State state = State(b, avatar, num_of_trees, num_of_lakes, num_of_players, num_of_players);
 	state.initialize();		// Dhmiourgia twn ontothtwn tou board
 	
 
@@ -111,7 +109,7 @@ int main() {
 			cout << "GAME PAUSED...\n\n";
 			cout << "Number of active werewolves is: " << state.get_num_of_werewolves() << endl;
 			cout << "Number of active vampires is: " << state.get_num_of_vampires() << endl;
-			cout << "Avatar has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
+			cout << "Avatar has " << state.get_avatar()->get_num_of_magic_filters() << " magic filters available" << endl << endl;
 			cout << "Press SPACE to return to game..." << endl;
 			while (pause) {
 				if (GetKeyState(VK_SPACE) & 0x8000) {
@@ -119,6 +117,18 @@ int main() {
 				}
 			}
 		}
+		if (GetKeyState(VK_NUMPAD1) & 0x8000) {
+			system("cls");
+			this_thread::sleep_for(200ms);
+			if (state.get_avatar()->get_num_of_magic_filters() > 0) {
+				state.team_heal(ch);
+				this_thread::sleep_for(5s);
+			}
+			else {
+				cout << "Avatar has not magic filters available...\n";
+			}
+		}
+
 
 		// Elegxos gia gameover
 		if (state.get_num_of_werewolves() == 0) {

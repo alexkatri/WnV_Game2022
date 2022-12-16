@@ -70,6 +70,9 @@ int Player::get_health() const {
 int Player::get_power() const {
 	return power;
 }
+int Player::get_defence() const {
+	return defence;
+}
 int Player::get_first_aid_kit() const {
 	return first_aid_kit;
 }
@@ -97,7 +100,8 @@ void Player::health_decrease(Player* attacker, Player* defender) {
 	defender->health -= attacker->power - defender->defence;
 }
 void Player::health_increase() {
-	++health;
+	if (health < 10)
+		++health;
 }
 void Player::attack(Player* p) {
 	p->health_decrease(this, p);
@@ -136,4 +140,8 @@ int Avatar::get_num_of_magic_filters() const {
 }
 void Avatar::increase_magic_filters() {
 	++num_of_magic_filters;
+}
+void Avatar::decrease_magic_filters() {
+	if (num_of_magic_filters > 0)
+		--num_of_magic_filters;
 }
