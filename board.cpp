@@ -50,15 +50,26 @@ void Board::push(int x, int y, Element* element) {
 	board[x][y] = element;
 	board[x][y]->set_empty(false);
 }
-bool Board::legal_move(Point* p) {
+bool Board::check_coordinates(Point& p) {
+	if ((p.x >= 0 && p.x <= size) && (p.y >= 0 && p.y <= size)) {
+		return true;
+	}
+	return false;
+}
+bool Board::legal_move(Point& p) {
 	// Point p is out of board
-	if (p->x < 0 || p->x >= size || p->y < 0 || p->y >= size) {
+	if (p.x < 0 || p.x >= size || p.y < 0 || p.y >= size) {
 		return false;
 	}
 	// Point p is inside the board
 	else {
-		if (board[p->x][p->y]->get_symbol() == '.') {
+		if (board[p.x][p.y]->get_symbol() == '.') {
 			return true;
 		}
 	}
+}
+void Board::set_ground(Point p) {
+	delete board[p.x][p.y];
+	board[p.x][p.y] = new Element(p.x, p.y, '.');
+	board[p.x][p.y]->set_empty(true);
 }

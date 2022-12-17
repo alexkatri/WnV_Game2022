@@ -8,11 +8,11 @@
 using namespace std;
 using namespace std::chrono;
 using namespace chrono_literals; // for the time pace
-								// it works for windows
+// it works for windows
 
 
 int main() {
-	
+
 	// Dhmiourgia tou board
 	unsigned short int size;
 	cout << "Give board size... (10 - 20)\n";
@@ -40,7 +40,7 @@ int main() {
 	Avatar* avatar = new Avatar(x, y);
 	cout << "Choose your team...\n";
 	cout << "Press 'w' for werewolves or 'v' for vampires...\n";
-	char ch;				// Exei to xarakthra 'w' h 'v' analoga me thn omada pou uposrthrizei o avatar
+	char ch;
 	valid = false;
 	while (!valid) {
 		try {
@@ -67,10 +67,12 @@ int main() {
 	int num_of_trees = size / 2;
 	int num_of_lakes = size / 4;
 	int num_of_players = size * size / 15;
-	State state = State(b, avatar, num_of_trees, num_of_lakes, num_of_players, num_of_players);
+	State state = State(b, num_of_trees, num_of_lakes, num_of_players, num_of_players);
+	state.set_board(b);
+	state.set_avatar(avatar);
 	state.initialize();		// Dhmiourgia twn ontothtwn tou board
-	
 
+	Move move = Move();
 
 	bool exit = false;
 	bool pause = false;
@@ -109,7 +111,7 @@ int main() {
 			cout << "GAME PAUSED...\n\n";
 			cout << "Number of active werewolves is: " << state.get_num_of_werewolves() << endl;
 			cout << "Number of active vampires is: " << state.get_num_of_vampires() << endl;
-			cout << "Avatar has " << state.get_avatar()->get_num_of_magic_filters() << " magic filters available" << endl << endl;
+			cout << "Avatar has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
 			cout << "Press SPACE to return to game..." << endl;
 			while (pause) {
 				if (GetKeyState(VK_SPACE) & 0x8000) {
@@ -117,17 +119,22 @@ int main() {
 				}
 			}
 		}
-		if (GetKeyState(VK_NUMPAD1) & 0x8000) {
-			system("cls");
-			this_thread::sleep_for(200ms);
-			if (state.get_avatar()->get_num_of_magic_filters() > 0) {
-				state.team_heal(ch);
-				this_thread::sleep_for(5s);
-			}
-			else {
-				cout << "Avatar has not magic filters available...\n";
-			}
+		Point old_p = avatar->get_point();					// avatar moving
+		if (GetKeyState(VK_UP) & 0x8000) {
+			move.move(b, old_p, avatar, 0);
 		}
+		else if (GetKeyState(VK_DOWN) & 0x8000) {
+			move.move(b, old_p, avatar, 1);
+		}
+		else if (GetKeyState(VK_RIGHT) & 0x8000) {
+			move.move(b, old_p, avatar, 2);
+		}
+		else if (GetKeyState(VK_LEFT) & 0x8000) {
+			move.move(b, old_p, avatar, 3);
+
+		}
+		move.werewolves_move(b, state);
+		move.vampires_move(b, state);
 
 
 		// Elegxos gia gameover
@@ -135,16 +142,28 @@ int main() {
 			system("cls");
 			this_thread::sleep_for(1s);
 			cout << "GAME OVER...\n\n" << "VAMPIRES WIN !!!\n\n";
+			if (avatar->get_symbol() == 'V') {
+				cout << "YOU WIN :)\n\n";
+			}
+			else {
+				cout << "YOU LOSE :(\n\n";
+			}
 			exit = true;
 		}
 		if (state.get_num_of_vampires() == 0) {
 			system("cls");
 			this_thread::sleep_for(1s);
 			cout << "GAME OVER...\n\n" << "WEREWOLVES WIN !!!\n\n";
+			if (avatar->get_symbol() == 'W') {
+				cout << "YOU WIN :)\n\n";
+			}
+			else {
+				cout << "YOU LOSE :(\n\n";
+			}
 			exit = true;
 		}
 
-		this_thread::sleep_for(100ms);			// for the time pace
+		this_thread::sleep_for(0.5s);			// for the time pace
 	}
 
 	delete avatar;

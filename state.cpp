@@ -5,13 +5,10 @@
 using namespace std;
 
 /////////////////////////////////////////////////
-State::State(Board& b, Avatar* a, int x, int y, int w, int v) : board(b), avatar(a), num_of_trees(x), num_of_lakes(y), num_of_werewolves(w), num_of_vampires(v) {};
+State::State(Board& b, int x, int y, int w, int v) : board(b), num_of_trees(x), num_of_lakes(y), num_of_werewolves(w), num_of_vampires(v) {};
 State::State(Board& b) : board(b), num_of_trees(0), num_of_lakes(0), num_of_werewolves(0), num_of_vampires(0) {};
 Board State::get_board() const {
 	return board;
-}
-Avatar* State::get_avatar() const {
-	return avatar;
 }
 int State::get_num_of_werewolves() const {
 	return num_of_werewolves;
@@ -56,6 +53,7 @@ void State::initialize() {
 				Werewolve* werewolve = new Werewolve(x, y);
 				board.push(x, y, werewolve);
 				werewolves_vector.push_back(werewolve);
+				//player_vector.push_back(werewolve->get_point());
 				exit = true;
 			}
 		}
@@ -70,6 +68,7 @@ void State::initialize() {
 				Vampire* vampire = new Vampire(x, y);
 				board.push(x, y, vampire);
 				vampires_vector.push_back(vampire);
+				//player_vector.push_back(vampire->get_point());
 				exit = true;
 			}
 		}
@@ -98,28 +97,6 @@ void State::initialize() {
 				board.push(x, y, lake);
 				exit = true;
 			}
-		}
-	}
-}
-void State::team_heal(char ch) {
-	if (ch == 'w' && timer == "night") {
-		cout << "Magic filter activated for your team members...\n\n";
-		cout << "Health level to be increased for all the " << ch << "'s...\n\n";
-		for (Werewolve* ptr : werewolves_vector) {
-			ptr->health_increase();
-			avatar->decrease_magic_filters();
-		}
-		cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
-	}
-	else {
-		if (ch == 'v' && timer == "day") {
-			cout << "Magic filter activated for your team members...\n\n";
-			cout << "Health level to be increased for all the " << ch << "'s...\n\n";
-			for (Vampire* ptr : vampires_vector) {
-				ptr->health_increase();
-				avatar->decrease_magic_filters();
-			}
-			cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
 		}
 	}
 }
