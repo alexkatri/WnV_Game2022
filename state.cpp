@@ -107,8 +107,8 @@ void State::team_heal(char ch) {
 		cout << "Health level to be increased for all the " << ch << "'s...\n\n";
 		for (Werewolve* ptr : werewolves_vector) {
 			ptr->health_increase();
-			avatar->decrease_magic_filters();
 		}
+		avatar->decrease_magic_filters();
 		cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
 	}
 	else {
@@ -117,8 +117,8 @@ void State::team_heal(char ch) {
 			cout << "Health level to be increased for all the " << ch << "'s...\n\n";
 			for (Vampire* ptr : vampires_vector) {
 				ptr->health_increase();
-				avatar->decrease_magic_filters();
 			}
+			avatar->decrease_magic_filters();
 			cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
 		}
 	}
