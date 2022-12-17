@@ -73,3 +73,4 @@ void Board::set_ground(Point p) {
 	board[p.x][p.y] = new Element(p.x, p.y, '.');
 	board[p.x][p.y]->set_empty(true);
 }
+

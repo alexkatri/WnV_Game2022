@@ -65,12 +65,18 @@ Player::Player() : Element() {
 	initialize();
 }
 
+bool Player::give_medicine() {
+	return rand() % 2;
+}
 
 int Player::get_health() const {
 	return health;
 }
 int Player::get_power() const {
 	return power;
+}
+int Player::get_defence() const {
+	return defence;
 }
 int Player::get_first_aid_kit() const {
 	return first_aid_kit;
@@ -107,30 +113,26 @@ void Player::health_decrease(Player* attacker, Player* defender) {
 	}
 }
 void Player::health_increase() {
-	++health;
+	if (health < 10) 
+		++health;
 }
 void Player::first_aid_kit_decrease() {
 	--first_aid_kit;
 }
-void Player::attack(Player* p) {
-	p->health_decrease(this, p);
+void Player::attack_enemy(Player* player, Player* enemy) {
+	if (player->get_power() >= enemy->get_power()) {
+		enemy->health_decrease(player, enemy);
+	}
 }
-//void Player::heal(Player* p) {
-//	p->health_increase();
-//}
-//void Player::move_up() {
-//	++point.y;
-//}
-//void Player::move_down() {
-//	--point.y;
-//}
-//void Player::move_right() {
-//	++point.x;
-//}
-//void Player::move_left() {
-//	--point.x;
-//}
-
+void Player::heal_ally(Player* player, Player* ally) {
+	int ally_health = ally->get_health();
+	if (player->first_aid_kit != 0 && ally_health < 10) {
+		if (give_medicine()) {
+			player->first_aid_kit_decrease();
+			ally->health_increase();
+		}
+	}
+}
 
 
 //////////////////////////////// class Werewolve
@@ -149,4 +151,8 @@ int Avatar::get_num_of_magic_filters() const {
 }
 void Avatar::increase_magic_filters() {
 	++num_of_magic_filters;
+}
+void Avatar::decrease_magic_filters() {
+	if (num_of_magic_filters > 0)
+		--num_of_magic_filters;
 }

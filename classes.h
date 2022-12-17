@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <list>
 
 using namespace std;
 
@@ -59,8 +58,11 @@ public:
 	Player(int, int, const char);
 	Player();
 
+	bool give_medicine();							// 1 = heal, 0 = don't heal
+
 	int get_health() const;
 	int get_power() const;
+	int get_defence() const;
 	int get_first_aid_kit() const;
 
 	void set_power();				// random [1-3] ~ doesn't change
@@ -68,15 +70,11 @@ public:
 	void set_first_aid_kit();		// random [0-2] ~ decreases when it gets used
 
 	void initialize();
-	void attack(Player*);
-	void heal(Player*);
 	void health_decrease(Player*, Player*);
 	void health_increase();
 	void first_aid_kit_decrease();
-	/*void move_up();
-	void move_down();
-	void move_right();
-	void move_left();*/
+	void attack_enemy(Player*, Player*);
+	void heal_ally(Player*, Player*);
 
 	friend class Move;
 };
@@ -91,25 +89,6 @@ class Vampire : public Player {
 public:
 	Vampire(int, int);
 	Vampire();
-
-	/*
-	void move_NW() {
-		move_up();
-		move_left();
-	}
-	void move_NE() {
-		move_up();
-		move_right();
-	}
-	void move_SW() {
-		move_down();
-		move_left();
-	}
-	void move_SE() {
-		move_down();
-		move_right();
-	}
-	*/
 };
 
 class Avatar : public Player {
@@ -120,6 +99,7 @@ public:
 	Avatar();
 	int get_num_of_magic_filters() const;
 	void increase_magic_filters();
+	void decrease_magic_filters();
 };
 
 class Board {
@@ -136,6 +116,7 @@ public:
 	bool check_coordinates(Point&);
 	bool legal_move(Point&);
 	void set_ground(Point);
+	bool is_equal(Point, Point);
 };
 
 class State {
@@ -149,11 +130,13 @@ protected:
 	string timer = "day";
 	vector <Werewolve*> werewolves_vector;
 	vector <Vampire*> vampires_vector;
-	//vector <Point> player_vector;
 public:
-	State(Board&, int, int, int, int);
+	State(Board&, Avatar*, int, int, int, int);
 	State(Board&);
+
 	Board get_board() const;
+	Avatar* get_avatar() const;
+	
 	int get_num_of_werewolves() const;
 	int get_num_of_vampires() const;
 	string get_timer() const;
@@ -161,6 +144,7 @@ public:
 	void set_avatar(Avatar*);
 	void change_timer(string);
 	void initialize();
+	void team_heal(char);
 
 	friend class Move;
 };
@@ -168,18 +152,20 @@ public:
 class Move {
 public:
 	Move();
+
 	int set_direction(char);						// 0 = up, 1 = down, 2 = right, 3 = left, 4 = NE, 5 = NW, 6 = SE, 7 = SW						
 	Point set_destination(Point&, int);				// Point& -> old location, int -> direction || it creates the new location
-	bool move_or_stay();							// 1 = move, 0 = stay
-	void move(Board&, Point&, Player*, int);
-	bool give_medicine();							// 1 = heal, 0 = don't heal
-	bool enemy_or_ally(Board&, Point&, Element*);	// 1 = enemy, 0 = ally
+	Player* get_player(State, Point, char);			// returns the player on a specific location
 
-	void area_check(Board&, Point&, Player*);		// looking for allies and enemies (also healing or attacking if necessary)
-	void attack_enemy(Player*, Player*);
-	void heal_ally(Player*, Player*);
+	bool move_or_stay();							// 1 = move, 0 = stay
+	bool enemy_or_ally(Board&, Point&, Element*);	// 1 = enemy, 0 = ally
+	bool is_equal(Point, Point);
+
+	void area_check(State, Board&, Point&, Player*);		// looking for allies and enemies (also healing or attacking if necessary)
+	void move(Board&, Point&, Player*, int);
 
 	void werewolves_move(Board&, State);
 	void vampires_move(Board&, State);
+
 };
 
