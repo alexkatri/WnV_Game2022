@@ -98,6 +98,8 @@ int main() {
 		cout << "Press '0' for exit\n";
 		cout << "Press '1' to use magic filter\n";
 
+		state.state_update();
+
 
 		// Elegxos tou plhktrologiou
 		if (GetKeyState(VK_NUMPAD0) & 0x8000) {  // 0x8000 -> key is

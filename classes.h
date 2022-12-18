@@ -68,10 +68,15 @@ public:
 	void heal(Player*);				// Gia sympaixth
 	void health_decrease(Player*, Player*);
 	void health_increase();
+	bool move_or_stay();
 	void move_up();
 	void move_down();
 	void move_right();
 	void move_left();
+	void move_NW();
+	void move_NE();
+	void move_SW();
+	void move_SE();
 };
 
 class Werewolve : public Player {
@@ -84,25 +89,6 @@ class Vampire : public Player {
 public:
 	Vampire(int, int);
 	Vampire();
-
-	/*
-	void move_NW() {
-		move_up();
-		move_left();
-	}
-	void move_NE() {
-		move_up();
-		move_right();
-	}
-	void move_SW() {
-		move_down();
-		move_left();
-	}
-	void move_SE() {
-		move_down();
-		move_right();
-	}
-	*/
 };
 
 class Avatar : public Player {

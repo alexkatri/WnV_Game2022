@@ -57,7 +57,7 @@ bool Board::legal_move(Player* player, Point* p) {
 	}
 	// Point p is inside the board
 	else {
-		if (board[p->x][p->y]->get_symbol() == '.') {
+		if (board[p->x][p->y]->is_empty()) {
 			return true;
 		}
 	}
@@ -110,6 +110,38 @@ void Board::move(Player* p, int i) {
 	case 3:
 		if (legal_move(p, old_p.x, old_p.y - 1)) {
 			p->move_left();
+			break;
+		}
+		else {
+			return;
+		}
+	case 4:	// NW
+		if (legal_move(p, old_p.x - 1, old_p.y - 1)) {
+			p->move_NW();
+			break;
+		}
+		else {
+			return;
+		}
+	case 5: // NE
+		if (legal_move(p, old_p.x - 1, old_p.y + 1)) {
+			p->move_NE();
+			break;
+		}
+		else {
+			return;
+		}
+	case 6: // SW
+		if (legal_move(p, old_p.x + 1, old_p.y - 1)) {
+			p->move_SW();
+			break;
+		}
+		else {
+			return;
+		}
+	case 7: // SE
+		if (legal_move(p, old_p.x +1, old_p.y + 1)) {
+			p->move_SE();
 			break;
 		}
 		else {

@@ -103,6 +103,11 @@ void Player::health_increase() {
 	if (health < 10)
 		++health;
 }
+bool Player::move_or_stay() {
+	// true = move, false = stay
+	srand((unsigned)time(NULL));
+	return rand() % 2;
+}
 void Player::attack(Player* p) {
 	p->health_decrease(this, p);
 }
@@ -120,6 +125,22 @@ void Player::move_right() {
 }
 void Player::move_left() {
 	--point.y;
+}
+void Player::move_NW() {
+	move_up();
+	move_left();
+}
+void Player::move_NE() {
+	move_up();
+	move_right();
+}
+void Player::move_SW() {
+	move_down();
+	move_left();
+}
+void Player::move_SE() {
+	move_down();
+	move_right();
 }
 
 

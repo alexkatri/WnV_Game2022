@@ -151,5 +151,14 @@ void State::avatar_move(int direction) {
 	board.move(avatar, direction);
 }
 void State::state_update() {
-
+	for (Werewolve* ptr : werewolves_vector) {
+		if (ptr->move_or_stay()) {
+			board.move(ptr, rand() % 4);
+		}
+	}
+	for (Vampire* ptr : vampires_vector) {
+		if (ptr->move_or_stay()) {
+			board.move(ptr, rand() % 8);
+		}
+	}
 }
