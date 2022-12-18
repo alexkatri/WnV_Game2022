@@ -58,7 +58,7 @@ public:
 	Player(int, int, const char);
 	Player();
 
-	bool give_medicine();							// 1 = heal, 0 = don't heal
+	bool give_medicine();				// 1 = heal, 0 = don't heal
 
 	int get_health() const;
 	int get_power() const;
@@ -67,7 +67,7 @@ public:
 
 	void set_power();				// random [1-3] ~ doesn't change
 	void set_defence();				// random [1-2] ~ doesn't change
-	void set_first_aid_kit();		// random [0-2] ~ decreases when it gets used
+	void set_first_aid_kit();			// random [0-2] ~ decreases when it gets used
 
 	void initialize();
 	void health_decrease(Player*, Player*);
@@ -116,7 +116,6 @@ public:
 	bool check_coordinates(Point&);
 	bool legal_move(Point&);
 	void set_ground(Point);
-	bool is_equal(Point, Point);
 };
 
 class State {
@@ -153,13 +152,13 @@ class Move {
 public:
 	Move();
 
-	int set_direction(char);						// 0 = up, 1 = down, 2 = right, 3 = left, 4 = NE, 5 = NW, 6 = SE, 7 = SW						
+	int set_direction(char);					// 0 = up, 1 = down, 2 = right, 3 = left, 4 = NE, 5 = NW, 6 = SE, 7 = SW						
 	Point set_destination(Point&, int);				// Point& -> old location, int -> direction || it creates the new location
-	Player* get_player(State, Point, char);			// returns the player on a specific location
+	Player* get_player(State, Point, char);				// returns the player on a specific location
 
-	bool move_or_stay();							// 1 = move, 0 = stay
-	bool enemy_or_ally(Board&, Point&, Element*);	// 1 = enemy, 0 = ally
-	bool is_equal(Point, Point);
+	bool move_or_stay();						// 1 = move, 0 = stay
+	bool enemy_or_ally(Board&, Point&, Element*);			// 1 = enemy, 0 = ally
+	bool is_equal(Point, Point);		
 
 	void area_check(State, Board&, Point&, Player*);		// looking for allies and enemies (also healing or attacking if necessary)
 	void move(Board&, Point&, Player*, int);
