@@ -96,6 +96,7 @@ int main() {
 		cout << "Time = " << state.get_timer() << endl << endl;
 		cout << "Press 'SPACE' for pause\n";
 		cout << "Press '0' for exit\n";
+		cout << "Press '1' to use magic filter\n";
 
 
 		// Elegxos tou plhktrologiou
@@ -127,6 +128,22 @@ int main() {
 			else {
 				cout << "Avatar has not magic filters available...\n";
 			}
+		}
+		if (GetKeyState(VK_UP) & 0x8000) {
+			system("cls");
+			state.avatar_move(0);
+		}
+		if (GetKeyState(VK_DOWN) & 0x8000) {
+			system("cls");
+			state.avatar_move(1);
+		}
+		if (GetKeyState(VK_RIGHT) & 0x8000) {
+			system("cls");
+			state.avatar_move(2);
+		}
+		if (GetKeyState(VK_LEFT) & 0x8000) {
+			system("cls");
+			state.avatar_move(3);
 		}
 
 

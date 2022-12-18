@@ -62,7 +62,6 @@ public:
 	int get_power() const;
 	int get_defence() const;
 	int get_first_aid_kit() const;
-	void set_power();
 	void set_first_aid_kit(int);
 	void initialize();				// Arxikopoiei ta epipeda power, defence kai first_aid_kit me tyxaies times
 	void attack(Player*);			// Gia antipalo paixth
@@ -128,7 +127,9 @@ public:
 	Element* at(int, int);			// Epistrefei to stoixeio tou board sth thesh (x, y)
 	void push(int, int, Element*);	// Eisagei ena stoixeio sth thesh (x, y) tou board
 	void display() const;
-	bool legal_move(Point*);
+	bool legal_move(Player*, Point*);
+	bool legal_move(Player*, int, int);
+	void move(Player*, int);
 };
 
 class State {
@@ -155,4 +156,6 @@ public:
 	void change_timer(string);			// Allazei th mera h th nyxta
 	void initialize();					// Dhmiourgei tis ontothtes tou board tyxaia
 	void team_heal(char);				// Epoulwnei ola ta melh ths omadas tou Avatar
+	void avatar_move(int);
+	void state_update();
 };

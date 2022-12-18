@@ -123,3 +123,33 @@ void State::team_heal(char ch) {
 		}
 	}
 }
+void State::avatar_move(int direction) {
+	Point new_p = Point();
+	switch (direction) {
+	case 0:
+		new_p.x = avatar->get_point().x - 1;
+		new_p.y = avatar->get_point().y;
+		break;
+	case 1:
+		new_p.x = avatar->get_point().x + 1;
+		new_p.y = avatar->get_point().y;
+		break;
+	case 2:
+		new_p.x = avatar->get_point().x;
+		new_p.y = avatar->get_point().y + 1;
+		break;
+	case 3:
+		new_p.x = avatar->get_point().x;
+		new_p.y = avatar->get_point().y - 1;
+		break;
+	}
+	if (board.legal_move(avatar, new_p.x, new_p.y)) {
+		if (board.at(new_p.x, new_p.y)->get_symbol() == '$') {
+			avatar->increase_magic_filters();
+		}
+	}
+	board.move(avatar, direction);
+}
+void State::state_update() {
+
+}

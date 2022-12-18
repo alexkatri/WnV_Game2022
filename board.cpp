@@ -50,7 +50,7 @@ void Board::push(int x, int y, Element* element) {
 	board[x][y] = element;
 	board[x][y]->set_empty(false);
 }
-bool Board::legal_move(Point* p) {
+bool Board::legal_move(Player* player, Point* p) {
 	// Point p is out of board
 	if (p->x < 0 || p->x >= size || p->y < 0 || p->y >= size) {
 		return false;
@@ -61,4 +61,64 @@ bool Board::legal_move(Point* p) {
 			return true;
 		}
 	}
+}
+bool Board::legal_move(Player* p, int x, int y) {
+	// Point p is out of board
+	if (x < 0 || x >= size || y < 0 || y >= size) {
+		return false;
+	}
+	// Point p is inside the board
+	else {
+		if (board[x][y]->get_symbol() == '.') {
+			return true;
+		}
+		if (p->get_symbol() == 'W' || p->get_symbol() == 'V') {
+			if (board[x][y]->get_symbol() == '$') {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+void Board::move(Player* p, int i) {
+	Point old_p = p->get_point();
+	switch (i) {
+	case 0:
+		if (legal_move(p, old_p.x - 1, old_p.y)) {
+			p->move_up();
+			break;
+		}
+		else {
+			return;
+		}
+	case 1:
+		if (legal_move(p, old_p.x + 1, old_p.y)) {
+			p->move_down();
+			break;
+		}
+		else {
+			return;
+		}
+	case 2:
+		if (legal_move(p, old_p.x, old_p.y + 1)) {
+			p->move_right();
+			break;
+		}
+		else {
+			return;
+		}
+	case 3:
+		if (legal_move(p, old_p.x, old_p.y - 1)) {
+			p->move_left();
+			break;
+		}
+		else {
+			return;
+		}
+	}
+
+	push(p->get_point().x, p->get_point().y, p);
+	board[old_p.x][old_p.y] = new Element(old_p.x, old_p.y, '.');
+	board[old_p.x][old_p.y]->set_empty(true);
+
 }

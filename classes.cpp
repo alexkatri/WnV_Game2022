@@ -110,16 +110,16 @@ void Player::heal(Player* p) {
 	p->health_increase();
 }
 void Player::move_up() {
-	++point.y;
+	--point.x;
 }
 void Player::move_down() {
-	--point.y;
-}
-void Player::move_right() {
 	++point.x;
 }
+void Player::move_right() {
+	++point.y;
+}
 void Player::move_left() {
-	--point.x;
+	--point.y;
 }
 
 
