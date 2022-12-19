@@ -64,11 +64,6 @@ Player::Player() : Element() {
 	set_symbol('P');
 	initialize();
 }
-
-bool Player::give_medicine() {
-	return rand() % 2;
-}
-
 int Player::get_health() const {
 	return health;
 }
@@ -81,57 +76,98 @@ int Player::get_defence() const {
 int Player::get_first_aid_kit() const {
 	return first_aid_kit;
 }
-
-
-void Player::set_power() {
-	power = rand() % 4;
-	while (power == 0) {
-		power = rand() % 4;
-	}
+void Player::set_first_aid_kit(int n) {
+	first_aid_kit = n;
 }
-void Player::set_defence() {
-	defence = rand() % 3;
-	while (defence == 0) {
-		defence = rand() % 3;
-	}
-}
-void Player::set_first_aid_kit() {
-	first_aid_kit = rand() % 3;
-}
-
-
 void Player::initialize() {
 	srand((unsigned)time(NULL));
 
-	set_power();
-	set_defence();
-	set_first_aid_kit();
+	int x = rand() % 4;
+	while (x == 0) {
+		x = rand() % 4;
+	}
+	power = x;
+
+	int y = rand() % 3;
+	while (y == 0) {
+		y = rand() % 3;
+	}
+	defence = y;
+
+	first_aid_kit = rand() % 3;
 }
 void Player::health_decrease(Player* attacker, Player* defender) {
-	if (attacker->power >= defender->defence) {
+	if (defender->get_health() <= attacker->get_power() - defender->get_defence()) {
+		defender->health = 0;
+	}
+	else {
 		defender->health -= attacker->power - defender->defence;
 	}
+	//cout << defender->get_symbol() << " attacked\n";
 }
 void Player::health_increase() {
-	if (health < 10) 
+	if (health < 10 && health > 0)
 		++health;
 }
-void Player::first_aid_kit_decrease() {
-	--first_aid_kit;
+bool Player::move_or_stay() {
+	// true = move, false = stay
+	srand((unsigned)time(NULL));
+	return rand() % 2;
 }
+//void Player::attack(Player* p) {
+//	p->health_decrease(this, p);
+//}
+//void Player::heal(Player* p) {
+//	p->health_increase();
+//}
+void Player::move_up() {
+	--point.x;
+}
+void Player::move_down() {
+	++point.x;
+}
+void Player::move_right() {
+	++point.y;
+}
+void Player::move_left() {
+	--point.y;
+}
+void Player::move_NW() {
+	move_up();
+	move_left();
+}
+void Player::move_NE() {
+	move_up();
+	move_right();
+}
+void Player::move_SW() {
+	move_down();
+	move_left();
+}
+void Player::move_SE() {
+	move_down();
+	move_right();
+}
+
 void Player::attack_enemy(Player* player, Player* enemy) {
 	if (player->get_power() >= enemy->get_power()) {
-		enemy->health_decrease(player, enemy);
+		player->health_decrease(player, enemy);
 	}
 }
 void Player::heal_ally(Player* player, Player* ally) {
-	int ally_health = ally->get_health();
-	if (player->first_aid_kit != 0 && ally_health < 10) {
-		if (give_medicine()) {
+	if (ally->get_health() > 0 && ally->get_health() < 10) {
+		if (player->get_first_aid_kit() != 0 && give_medicine()) {
 			player->first_aid_kit_decrease();
 			ally->health_increase();
 		}
 	}
+	
+}
+void Player::first_aid_kit_decrease() {
+	--first_aid_kit;
+}
+bool Player::give_medicine() {
+	return rand() % 2;
 }
 
 

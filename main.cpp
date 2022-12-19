@@ -12,22 +12,6 @@ using namespace chrono_literals; // for the time pace
 
 
 int main() {
-	//// Initial message
-	//cout << "\nWelcome...\n";
-	//this_thread::sleep_for(1.5s);
-	//system("cls");
-	//cout << "\nSoon you will have to choose a team...\n\n";
-	//this_thread::sleep_for(1s);
-	//cout << "Will you be a Werewolf or a Vampire?\n";
-	//this_thread::sleep_for(2s);
-	//system("cls");
-	//cout << "\nYou will have a magic filter on your possession, \nwhich can be used only once, to heal all your team members." << endl << endl;
-	//this_thread::sleep_for(3s);
-	//cout << "There will also be an additional magic filter on the map...\n";
-	//this_thread::sleep_for(1.5s);
-	//cout << "Make sure to find it and get it!!!";
-	//this_thread::sleep_for(2.5s);
-	//system("cls");
 
 	// Dhmiourgia tou board
 	unsigned short int size;
@@ -56,7 +40,7 @@ int main() {
 	Avatar* avatar = new Avatar(x, y);
 	cout << "Choose your team...\n";
 	cout << "Press 'w' for werewolves or 'v' for vampires...\n";
-	char ch;
+	char ch;				// Exei to xarakthra 'w' h 'v' analoga me thn omada pou uposrthrizei o avatar
 	valid = false;
 	while (!valid) {
 		try {
@@ -72,26 +56,11 @@ int main() {
 	}
 	if (ch == 'w') {
 		avatar->set_symbol('W');
-		//system("cls");
-		//cout << "\nSo Werewolf it is...\n\n";
-		//this_thread::sleep_for(1s);
-		//cout << "Be careful..." << endl;
-		//this_thread::sleep_for(1s);
-		//cout << "You can use the magic filter only at night!!!" << endl;
-		//this_thread::sleep_for(2s);
 	}
 	else if (ch == 'v') {
 		avatar->set_symbol('V');
-		//system("cls");
-		//cout << "\nSo Vapire it is...\n\n";
-		//this_thread::sleep_for(1s);
-		//cout << "Be careful..." << endl;
-		//this_thread::sleep_for(1s);
-		//cout << "You can use the magic filter only at daytime!!!" << endl;
-		//this_thread::sleep_for(2s);
 	}
 	b.push(x, y, avatar);
-	
 
 
 	// Dhmiourgia tou state
@@ -101,7 +70,6 @@ int main() {
 	State state = State(b, avatar, num_of_trees, num_of_lakes, num_of_players, num_of_players);
 	state.initialize();		// Dhmiourgia twn ontothtwn tou board
 
-	Move move = Move();
 
 	bool exit = false;
 	bool pause = false;
@@ -128,6 +96,16 @@ int main() {
 		cout << "Press 'SPACE' for pause\n";
 		cout << "Press '0' for exit\n";
 		cout << "Press '1' to use magic filter\n";
+
+		for (int i = 0; i < num_of_players; i++) {
+			state.print_info(i);
+		}
+
+		state.state_update(num_of_players);
+		//state.delete_players(num_of_players);
+		for (int i = 0; i < num_of_players; i++) {
+			state.scan_area(i);
+		}
 
 
 		// Elegxos tou plhktrologiou
@@ -157,26 +135,25 @@ int main() {
 				this_thread::sleep_for(5s);
 			}
 			else {
-				cout << "Avatar has not magic filters available...\n";
-				this_thread::sleep_for(1.5s);
+				cout << "Avatar has no magic filters available...\n";
 			}
 		}
-		Point old_p = avatar->get_point();					// avatar moving
 		if (GetKeyState(VK_UP) & 0x8000) {
-			move.move(b, old_p, avatar, 0);
+			system("cls");
+			state.avatar_move(0);
 		}
-		else if (GetKeyState(VK_DOWN) & 0x8000) {
-			move.move(b, old_p, avatar, 1);
+		if (GetKeyState(VK_DOWN) & 0x8000) {
+			system("cls");
+			state.avatar_move(1);
 		}
-		else if (GetKeyState(VK_RIGHT) & 0x8000) {
-			move.move(b, old_p, avatar, 2);
+		if (GetKeyState(VK_RIGHT) & 0x8000) {
+			system("cls");
+			state.avatar_move(2);
 		}
-		else if (GetKeyState(VK_LEFT) & 0x8000) {
-			move.move(b, old_p, avatar, 3);
-
+		if (GetKeyState(VK_LEFT) & 0x8000) {
+			system("cls");
+			state.avatar_move(3);
 		}
-		move.werewolves_move(b, state);
-		move.vampires_move(b, state);
 
 
 		// Elegxos gia gameover
@@ -184,28 +161,16 @@ int main() {
 			system("cls");
 			this_thread::sleep_for(1s);
 			cout << "GAME OVER...\n\n" << "VAMPIRES WIN !!!\n\n";
-			if (avatar->get_symbol() == 'V') {
-				cout << "YOU WIN :)\n\n";
-			}
-			else {
-				cout << "YOU LOSE :(\n\n";
-			}
 			exit = true;
 		}
 		if (state.get_num_of_vampires() == 0) {
 			system("cls");
 			this_thread::sleep_for(1s);
 			cout << "GAME OVER...\n\n" << "WEREWOLVES WIN !!!\n\n";
-			if (avatar->get_symbol() == 'W') {
-				cout << "YOU WIN :)\n\n";
-			}
-			else {
-				cout << "YOU LOSE :(\n\n";
-			}
 			exit = true;
 		}
 
-		this_thread::sleep_for(0.5s);			// for the time pace
+		this_thread::sleep_for(1s);			// for the time pace
 	}
 
 	delete avatar;
