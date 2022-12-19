@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include "classes.h"
 #include <cstdlib>
@@ -151,3 +152,4 @@ void Move::vampires_move(Board& b, State state) {
 		}
 	}
 }
+*/
