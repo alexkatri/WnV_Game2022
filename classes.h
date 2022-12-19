@@ -9,6 +9,8 @@ struct Point {
 	int y = 0;
 	Point(int, int);
 	Point() {};
+	bool near_points(Point);
+	bool equal(Point&);
 };
 
 class Element {
@@ -69,6 +71,7 @@ public:
 	void health_decrease(Player*, Player*);
 	void health_increase();
 	bool move_or_stay();
+	bool enemy(Element*);
 	void move_up();
 	void move_down();
 	void move_right();
@@ -110,12 +113,14 @@ public:
 	Board();
 	//~Board();
 	int get_size() const;
+	Element*** get_board();
 	Element* at(int, int);			// Epistrefei to stoixeio tou board sth thesh (x, y)
 	void push(int, int, Element*);	// Eisagei ena stoixeio sth thesh (x, y) tou board
 	void display() const;
 	bool legal_move(Player*, Point*);
 	bool legal_move(Player*, int, int);
 	void move(Player*, int);
+	void kill(int, int);			// Diagrafei to stoixeio apo ton xarth
 };
 
 class State {
@@ -143,5 +148,5 @@ public:
 	void initialize();					// Dhmiourgei tis ontothtes tou board tyxaia
 	void team_heal(char);				// Epoulwnei ola ta melh ths omadas tou Avatar
 	void avatar_move(int);
-	void state_update();
+	void state_update();				// Metakinei tous paixtes
 };

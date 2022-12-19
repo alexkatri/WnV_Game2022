@@ -6,6 +6,18 @@ using namespace std;
 
 //////////////////////////////////// struct Point
 Point::Point(int a, int b) : x(a), y(b) {};
+bool Point::near_points(Point p) {
+	if ((this->x == p.x - 1 && this->y == p.y) || (this->x == p.x + 1 && this->y == p.y) || (this->x == p.x && this->y == p.y - 1) || (this->x == p.x && this->y == p.y + 1)) {
+		return true;
+	}
+	return false;
+}
+bool Point::equal(Point& p) {
+	if (this->x == p.x && this->y == p.y) {
+		return true;
+	}
+	return false;
+}
 
 
 
@@ -107,6 +119,15 @@ bool Player::move_or_stay() {
 	// true = move, false = stay
 	srand((unsigned)time(NULL));
 	return rand() % 2;
+}
+bool Player::enemy(Element* p) {
+	if (this->get_symbol() == 'w' && p->get_symbol() == 'v') {
+		return true;
+	}
+	if (this->get_symbol() == 'v' && p->get_symbol() == 'w') {
+		return true;
+	}
+	return false;
 }
 void Player::attack(Player* p) {
 	p->health_decrease(this, p);

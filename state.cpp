@@ -151,14 +151,61 @@ void State::avatar_move(int direction) {
 	board.move(avatar, direction);
 }
 void State::state_update() {
-	for (Werewolve* ptr : werewolves_vector) {
-		if (ptr->move_or_stay()) {
-			board.move(ptr, rand() % 4);
+	srand((unsigned)time(NULL));
+	if (rand() % 2 == 1) {
+		for (Werewolve* ptr : werewolves_vector) {
+			Point point = ptr->get_point();
+			int iterator = 0;
+			for (Vampire* enemy : vampires_vector) {
+				if (point.near_points(enemy->get_point())) {
+					if (ptr->get_power() >= enemy->get_power()) {
+						ptr->attack(enemy);
+						if (enemy->get_health() <= 0) {
+							vampires_vector.erase(vampires_vector.begin() + iterator);
+							--num_of_vampires;
+							board.kill(enemy->get_point().x, enemy->get_point().y);
+						}
+					}
+					else {
+						do {
+							board.move(ptr, rand() % 4);
+						} while (ptr->get_point().equal(point));
+					}
+				}
+				iterator++;
+			}
+
+			if (ptr->move_or_stay()) {
+				board.move(ptr, rand() % 4);
+			}
 		}
 	}
-	for (Vampire* ptr : vampires_vector) {
-		if (ptr->move_or_stay()) {
-			board.move(ptr, rand() % 8);
+	else {
+		for (Vampire* ptr : vampires_vector) {
+			Point point = ptr->get_point();
+			int iterator = 0;
+			for (Werewolve* enemy : werewolves_vector) {
+				if (point.near_points(enemy->get_point())) {
+					if (ptr->get_power() >= enemy->get_power()) {
+						ptr->attack(enemy);
+						if (enemy->get_health() <= 0) {
+							werewolves_vector.erase(werewolves_vector.begin() + iterator);
+							--num_of_vampires;
+							board.kill(enemy->get_point().x, enemy->get_point().y);
+						}
+					}
+					else {
+						do {
+							board.move(ptr, rand() % 8);
+						} while (ptr->get_point().equal(point));
+					}
+				}
+				iterator++;
+			}
+
+			if (ptr->move_or_stay()) {
+				board.move(ptr, rand() % 8);
+			}
 		}
 	}
 }

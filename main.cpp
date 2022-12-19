@@ -107,9 +107,8 @@ int main() {
 		}
 		if (GetKeyState(VK_SPACE) & 0x8000) {
 			pause = true;
-			system("cls");
 			this_thread::sleep_for(200ms);
-			cout << "GAME PAUSED...\n\n";
+			cout << "\n\n\nGAME PAUSED...\n\n";
 			cout << "Number of active werewolves is: " << state.get_num_of_werewolves() << endl;
 			cout << "Number of active vampires is: " << state.get_num_of_vampires() << endl;
 			cout << "Avatar has " << state.get_avatar()->get_num_of_magic_filters() << " magic filters available" << endl << endl;

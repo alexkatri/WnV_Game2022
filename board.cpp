@@ -1,6 +1,7 @@
 #include <iostream>
 #include "classes.h"
 #include <cstdlib>
+#include <thread>
 
 using namespace std;
 
@@ -32,6 +33,9 @@ Board::Board() {
 //}
 int Board::get_size() const {
 	return size;
+}
+Element*** Board::get_board() {
+	return board;
 }
 Element* Board::at(int x, int y) {
 	return board[x][y];
@@ -151,6 +155,11 @@ void Board::move(Player* p, int i) {
 
 	push(p->get_point().x, p->get_point().y, p);
 	board[old_p.x][old_p.y] = new Element(old_p.x, old_p.y, '.');
-	board[old_p.x][old_p.y]->set_empty(true);
-
+}
+void Board::kill(int x, int y) {
+	delete board[x][y];
+	board[x][y] = new Element(x, y, '.');
+	system("cls");
+	cout << "Player killed...";
+	this_thread::sleep_for(200ms);
 }
