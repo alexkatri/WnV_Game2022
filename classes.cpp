@@ -112,7 +112,7 @@ void Player::health_decrease(Player* attacker, Player* defender) {
 	defender->health -= attacker->power - defender->defence;
 }
 void Player::health_increase() {
-	if (health < 10)
+	if (health < 5)
 		++health;
 }
 bool Player::move_or_stay() {
@@ -134,6 +134,7 @@ void Player::attack(Player* p) {
 }
 void Player::heal(Player* p) {
 	p->health_increase();
+	--first_aid_kit;
 }
 void Player::move_up() {
 	--point.x;

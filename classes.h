@@ -54,7 +54,7 @@ public:
 class Player : public Element {
 	int power = 0;
 	int defence = 0;
-	int health = 10;
+	int health = 5;
 	int first_aid_kit = 0;
 public:
 	Player(const Point&, const char);
@@ -117,7 +117,6 @@ public:
 	Element* at(int, int);			// Epistrefei to stoixeio tou board sth thesh (x, y)
 	void push(int, int, Element*);	// Eisagei ena stoixeio sth thesh (x, y) tou board
 	void display() const;
-	bool legal_move(Player*, Point*);
 	bool legal_move(Player*, int, int);
 	void move(Player*, int);
 	void kill(int, int);			// Diagrafei to stoixeio apo ton xarth
@@ -145,8 +144,11 @@ public:
 	void set_board(Board);
 	void set_avatar(Avatar*);
 	void change_timer(string);			// Allazei th mera h th nyxta
+	void print() const;
 	void initialize();					// Dhmiourgei tis ontothtes tou board tyxaia
 	void team_heal(char);				// Epoulwnei ola ta melh ths omadas tou Avatar
 	void avatar_move(int);
 	void state_update();				// Metakinei tous paixtes
+	bool gameover() const;				// Elegxos gia gameover
+	void key_control(bool&, bool&, char);	// Elegxos tou plhktrologiou
 };

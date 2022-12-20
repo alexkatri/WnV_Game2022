@@ -90,77 +90,10 @@ int main() {
 			time_then = time_now;
 		}
 
-		// print board
-		system("cls");
-		state.get_board().display();
-		cout << "Time = " << state.get_timer() << endl << endl;
-		cout << "Press 'SPACE' for pause\n";
-		cout << "Press '0' for exit\n";
-		cout << "Press '1' to use magic filter\n";
-
+		state.print();
 		state.state_update();
-
-
-		// Elegxos tou plhktrologiou
-		if (GetKeyState(VK_NUMPAD0) & 0x8000) {  // 0x8000 -> key is
-			exit = true;
-		}
-		if (GetKeyState(VK_SPACE) & 0x8000) {
-			pause = true;
-			this_thread::sleep_for(200ms);
-			cout << "\n\n\nGAME PAUSED...\n\n";
-			cout << "Number of active werewolves is: " << state.get_num_of_werewolves() << endl;
-			cout << "Number of active vampires is: " << state.get_num_of_vampires() << endl;
-			cout << "Avatar has " << state.get_avatar()->get_num_of_magic_filters() << " magic filters available" << endl << endl;
-			cout << "Press SPACE to return to game..." << endl;
-			while (pause) {
-				if (GetKeyState(VK_SPACE) & 0x8000) {
-					pause = false;
-				}
-			}
-		}
-		if (GetKeyState(VK_NUMPAD1) & 0x8000) {
-			system("cls");
-			this_thread::sleep_for(200ms);
-			if (state.get_avatar()->get_num_of_magic_filters() > 0) {
-				state.team_heal(ch);
-				this_thread::sleep_for(5s);
-			}
-			else {
-				cout << "Avatar has not magic filters available...\n";
-			}
-		}
-		if (GetKeyState(VK_UP) & 0x8000) {
-			system("cls");
-			state.avatar_move(0);
-		}
-		if (GetKeyState(VK_DOWN) & 0x8000) {
-			system("cls");
-			state.avatar_move(1);
-		}
-		if (GetKeyState(VK_RIGHT) & 0x8000) {
-			system("cls");
-			state.avatar_move(2);
-		}
-		if (GetKeyState(VK_LEFT) & 0x8000) {
-			system("cls");
-			state.avatar_move(3);
-		}
-
-
-		// Elegxos gia gameover
-		if (state.get_num_of_werewolves() == 0) {
-			system("cls");
-			this_thread::sleep_for(1s);
-			cout << "GAME OVER...\n\n" << "VAMPIRES WIN !!!\n\n";
-			exit = true;
-		}
-		if (state.get_num_of_vampires() == 0) {
-			system("cls");
-			this_thread::sleep_for(1s);
-			cout << "GAME OVER...\n\n" << "WEREWOLVES WIN !!!\n\n";
-			exit = true;
-		}
+		state.key_control(exit, pause, ch);				
+		if (state.gameover()) exit = true;
 
 		this_thread::sleep_for(100ms);			// for the time pace
 	}

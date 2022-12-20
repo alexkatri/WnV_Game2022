@@ -1,6 +1,8 @@
 #include <iostream>
 #include "classes.h"
 #include <cstdlib>
+#include <thread>	// for the time pace
+#include <windows.h>   // for keyboard input (windows)
 
 using namespace std;
 
@@ -30,6 +32,14 @@ void State::set_avatar(Avatar* A) {
 }
 void State::change_timer(string s) {
 	timer = s;
+}
+void State::print() const {
+	system("cls");
+	board.display();
+	cout << "Time = " << timer << endl << endl;
+	cout << "Press 'SPACE' for pause\n";
+	cout << "Press '0' for exit\n";
+	cout << "Press '1' to use magic filter\n";
 }
 void State::initialize() {
 	srand((unsigned)time(NULL));
@@ -152,60 +162,146 @@ void State::avatar_move(int direction) {
 }
 void State::state_update() {
 	srand((unsigned)time(NULL));
-	if (rand() % 2 == 1) {
-		for (Werewolve* ptr : werewolves_vector) {
-			Point point = ptr->get_point();
-			int iterator = 0;
-			for (Vampire* enemy : vampires_vector) {
-				if (point.near_points(enemy->get_point())) {
-					if (ptr->get_power() >= enemy->get_power()) {
-						ptr->attack(enemy);
-						if (enemy->get_health() <= 0) {
-							vampires_vector.erase(vampires_vector.begin() + iterator);
-							--num_of_vampires;
-							board.kill(enemy->get_point().x, enemy->get_point().y);
-						}
-					}
-					else {
-						do {
-							board.move(ptr, rand() % 4);
-						} while (ptr->get_point().equal(point));
+	for (Werewolve* ptr : werewolves_vector) {
+		Point point = ptr->get_point();
+		int iterator = 0;
+		for (Vampire* enemy : vampires_vector) {
+			if (point.near_points(enemy->get_point())) {
+				if (ptr->get_power() >= enemy->get_power()) {
+					ptr->attack(enemy);
+					if (enemy->get_health() <= 0) {
+						vampires_vector.erase(vampires_vector.begin() + iterator);
+						--num_of_vampires;
+						board.kill(enemy->get_point().x, enemy->get_point().y);
+						cout << "\n\n\nvampire killed...";
+						this_thread::sleep_for(1s);
 					}
 				}
-				iterator++;
+				else {
+					do {
+						board.move(ptr, rand() % 4);
+					} while (ptr->get_point().equal(point));
+				}
 			}
+			iterator++;
+		}
 
-			if (ptr->move_or_stay()) {
-				board.move(ptr, rand() % 4);
+		for (Werewolve* ptr2 : werewolves_vector) {
+			if (ptr2 == ptr) continue;
+			if (point.near_points(ptr2->get_point())) {
+				if (ptr2->get_health() < 5 && ptr->get_first_aid_kit() > 0) {
+					if (rand() % 2) {
+						ptr->heal(ptr2);
+					}
+				}
+			}
+		}
+
+		if (ptr->move_or_stay()) {
+			board.move(ptr, rand() % 4);
+		}
+	}
+	
+
+	for (Vampire* ptr : vampires_vector) {
+		Point point = ptr->get_point();
+		int iterator = 0;
+		for (Werewolve* enemy : werewolves_vector) {
+			if (point.near_points(enemy->get_point())) {
+				if (ptr->get_power() >= enemy->get_power()) {
+					ptr->attack(enemy);
+					if (enemy->get_health() <= 0) {
+						werewolves_vector.erase(werewolves_vector.begin() + iterator);
+						--num_of_werewolves;
+						board.kill(enemy->get_point().x, enemy->get_point().y);
+						cout << "\n\n\nwerewolve killed...";
+						this_thread::sleep_for(1s);
+					}
+				}
+				else {
+					do {
+						board.move(ptr, rand() % 8);
+					} while (ptr->get_point().equal(point));
+				}
+			}
+			iterator++;
+		}
+
+		for (Vampire* ptr2 : vampires_vector) {
+			if (ptr2 == ptr) continue;
+			if (point.near_points(ptr2->get_point())) {
+				if (ptr2->get_health() < 5 && ptr->get_first_aid_kit() > 0) {
+					if (rand() % 2) {
+						ptr->heal(ptr2);
+					}
+				}
+			}
+		}
+
+		if (ptr->move_or_stay()) {
+			board.move(ptr, rand() % 8);
+		}
+	}
+}
+bool State::gameover() const {
+	if (num_of_werewolves == 0) {
+		system("cls");
+		this_thread::sleep_for(1s);
+		cout << "GAME OVER...\n\n" << "VAMPIRES WIN !!!\n\n";
+		return true;
+	}
+	if (num_of_vampires == 0) {
+		system("cls");
+		this_thread::sleep_for(1s);
+		cout << "GAME OVER...\n\n" << "WEREWOLVES WIN !!!\n\n";
+		return true;
+	}
+	return false;
+}
+
+void State::key_control(bool& exit, bool& pause, char team) {
+	if (GetKeyState(VK_NUMPAD0) & 0x8000) {  // 0x8000 -> key is
+		exit = true;
+	}
+	if (GetKeyState(VK_SPACE) & 0x8000) {
+		pause = true;
+		this_thread::sleep_for(200ms);
+		cout << "\n\n\nGAME PAUSED...\n\n";
+		cout << "Number of active werewolves is: " << num_of_werewolves << endl;
+		cout << "Number of active vampires is: " << num_of_vampires << endl;
+		cout << "Avatar has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
+		cout << "Press SPACE to return to game..." << endl;
+		while (pause) {
+			if (GetKeyState(VK_SPACE) & 0x8000) {
+				pause = false;
 			}
 		}
 	}
-	else {
-		for (Vampire* ptr : vampires_vector) {
-			Point point = ptr->get_point();
-			int iterator = 0;
-			for (Werewolve* enemy : werewolves_vector) {
-				if (point.near_points(enemy->get_point())) {
-					if (ptr->get_power() >= enemy->get_power()) {
-						ptr->attack(enemy);
-						if (enemy->get_health() <= 0) {
-							werewolves_vector.erase(werewolves_vector.begin() + iterator);
-							--num_of_vampires;
-							board.kill(enemy->get_point().x, enemy->get_point().y);
-						}
-					}
-					else {
-						do {
-							board.move(ptr, rand() % 8);
-						} while (ptr->get_point().equal(point));
-					}
-				}
-				iterator++;
-			}
-
-			if (ptr->move_or_stay()) {
-				board.move(ptr, rand() % 8);
-			}
+	if (GetKeyState(VK_NUMPAD1) & 0x8000) {
+		system("cls");
+		this_thread::sleep_for(200ms);
+		if (avatar->get_num_of_magic_filters() > 0) {
+			team_heal(team);
+			this_thread::sleep_for(5s);
 		}
+		else {
+			cout << "Avatar has not magic filters available...\n";
+		}
+	}
+	if (GetKeyState(VK_UP) & 0x8000) {
+		system("cls");
+		avatar_move(0);
+	}
+	if (GetKeyState(VK_DOWN) & 0x8000) {
+		system("cls");
+		avatar_move(1);
+	}
+	if (GetKeyState(VK_RIGHT) & 0x8000) {
+		system("cls");
+		avatar_move(2);
+	}
+	if (GetKeyState(VK_LEFT) & 0x8000) {
+		system("cls");
+		avatar_move(3);
 	}
 }

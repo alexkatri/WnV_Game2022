@@ -54,18 +54,6 @@ void Board::push(int x, int y, Element* element) {
 	board[x][y] = element;
 	board[x][y]->set_empty(false);
 }
-bool Board::legal_move(Player* player, Point* p) {
-	// Point p is out of board
-	if (p->x < 0 || p->x >= size || p->y < 0 || p->y >= size) {
-		return false;
-	}
-	// Point p is inside the board
-	else {
-		if (board[p->x][p->y]->is_empty()) {
-			return true;
-		}
-	}
-}
 bool Board::legal_move(Player* p, int x, int y) {
 	// Point p is out of board
 	if (x < 0 || x >= size || y < 0 || y >= size) {
@@ -159,7 +147,4 @@ void Board::move(Player* p, int i) {
 void Board::kill(int x, int y) {
 	delete board[x][y];
 	board[x][y] = new Element(x, y, '.');
-	system("cls");
-	cout << "Player killed...";
-	this_thread::sleep_for(200ms);
 }
