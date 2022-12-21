@@ -39,7 +39,7 @@ void State::print() const {
 	cout << "Time = " << timer << endl << endl;
 	cout << "Press 'SPACE' for pause\n";
 	cout << "Press '0' for exit\n";
-	cout << "Press '1' to use magic filter\n";
+	cout << "Press '1' to use magic potion\n";
 }
 void State::initialize() {
 	//srand((unsigned)time(NULL));
@@ -115,22 +115,22 @@ void State::team_heal(char ch) {
 	if (ch == 'w' && timer == "night") {
 		if (avatar->get_num_of_magic_filters() > 0) {
 			if (is_health_full('w')) {
-				cout << "Magic filter activated for your team members...\n\n";
+				cout << "Magic potion activated for your team members...\n\n";
 				cout << "Health level to be increased for all the " << ch << "'s...\n\n";
 				for (Werewolve* ptr : werewolves_vector) {
 					ptr->health_increase();
 				}
 				avatar->decrease_magic_filters();
-				cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
+				cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
 			}
 			else {
-				cout << "No need to use your magic filter...\n\n";
+				cout << "No need to use your magic potion...\n\n";
 				this_thread::sleep_for(0.5s);
 				cout << "All your team members are healthy!\n\n";
 			}
 		}
 		else {
-			cout << "Avatar has no magic filters available...\n";
+			cout << "Avatar has no magic potions available...\n";
 			this_thread::sleep_for(2s);
 		}
 		
@@ -138,28 +138,28 @@ void State::team_heal(char ch) {
 	else if (ch == 'v' && timer == "day") {
 		if (avatar->get_num_of_magic_filters() > 0) {
 			if (is_health_full('v')) {
-				cout << "Magic filter activated for your team members...\n\n";
+				cout << "Magic potion activated for your team members...\n\n";
 				cout << "Health level to be increased for all the " << ch << "'s...\n\n";
 				for (Vampire* ptr : vampires_vector) {
 					ptr->health_increase();
 				}
 				avatar->decrease_magic_filters();
-				cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
+				cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
 			}
 			else {
-				cout << "No need to use your magic filter...\n\n";
+				cout << "No need to use your magic potion...\n\n";
 				this_thread::sleep_for(0.5s);
 				cout << "All your team members are healthy!\n\n";
 			}
 		}
 		else {
-			cout << "Avatar has no magic filters available...\n";
+			cout << "Avatar has no magic potions available...\n";
 			this_thread::sleep_for(2s);
 		}
 
 	}
 	else if ((ch == 'w' && timer == "day") || (ch == 'v' && timer == "night")) {
-		cout << "You can't use the magic filter now\n";
+		cout << "You can't use the magic potion now\n";
 		cout << "It's still " << timer << "..." << endl;
 	}
 }
@@ -244,7 +244,7 @@ void State::state_update() {
 						werewolves_vector.erase(werewolves_vector.begin() + iterator);
 						--num_of_werewolves;
 						board.kill(enemy->get_point().x, enemy->get_point().y);
-						cout << "\n\n\nwerewolve killed...";
+						cout << "\n\n\nwerewolf killed...";
 						this_thread::sleep_for(1s);
 					}
 				}
@@ -313,7 +313,7 @@ void State::key_control(bool& exit, bool& pause, char team) {
 		cout << "\n\n\nGAME PAUSED...\n\n";
 		cout << "Number of active werewolves is: " << num_of_werewolves << endl;
 		cout << "Number of active vampires is: " << num_of_vampires << endl;
-		cout << "Avatar has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
+		cout << "Avatar has " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
 		print_info();
 		cout << "Press SPACE to return to game..." << endl;
 		while (pause) {

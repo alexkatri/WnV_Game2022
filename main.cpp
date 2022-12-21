@@ -22,9 +22,9 @@ int main() {
 	cout << "Will you be a Werewolf or a Vampire?\n";
 	this_thread::sleep_for(2s);
 	system("cls");
-	cout << "\nYou will have a magic filter on your possession, \nwhich can be used only once, to heal all your team members." << endl << endl;
+	cout << "\nYou will have a magic potion on your possession, \nwhich can be used only once, to heal all your team members." << endl << endl;
 	this_thread::sleep_for(3s);
-	cout << "There will also be an additional magic filter on the map...\n";
+	cout << "There will also be an additional magic potion on the map...\n";
 	this_thread::sleep_for(1.5s);
 	cout << "Make sure to find it and get it!!!";
 	this_thread::sleep_for(2.5s);
@@ -80,7 +80,7 @@ int main() {
 		this_thread::sleep_for(1s);
 		cout << "Be careful..." << endl;
 		this_thread::sleep_for(1s);
-		cout << "You can use the magic filter only at night!!!" << endl;
+		cout << "You can use the magic potion only at night!!!" << endl;
 		this_thread::sleep_for(2s);
 	}
 	else if (ch == 'v') {
@@ -92,7 +92,7 @@ int main() {
 		this_thread::sleep_for(1s);
 		cout << "Be careful..." << endl;
 		this_thread::sleep_for(1s);
-		cout << "You can use the magic filter only at daytime!!!" << endl;
+		cout << "You can use the magic potion only at daytime!!!" << endl;
 		this_thread::sleep_for(2s);
 	}
 	b.push(x, y, avatar);
