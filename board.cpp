@@ -1,6 +1,7 @@
 #include <iostream>
 #include "classes.h"
 #include <cstdlib>
+#include <thread>
 
 using namespace std;
 
@@ -33,6 +34,9 @@ Board::Board() {
 int Board::get_size() const {
 	return size;
 }
+Element*** Board::get_board() {
+	return board;
+}
 Element* Board::at(int x, int y) {
 	return board[x][y];
 }
@@ -49,18 +53,6 @@ void Board::push(int x, int y, Element* element) {
 	delete board[x][y];
 	board[x][y] = element;
 	board[x][y]->set_empty(false);
-}
-bool Board::legal_move(Player* player, Point* p) {
-	// Point p is out of board
-	if (p->x < 0 || p->x >= size || p->y < 0 || p->y >= size) {
-		return false;
-	}
-	// Point p is inside the board
-	else {
-		if (board[p->x][p->y]->is_empty()) {
-			return true;
-		}
-	}
 }
 bool Board::legal_move(Player* p, int x, int y) {
 	// Point p is out of board
@@ -151,41 +143,8 @@ void Board::move(Player* p, int i) {
 
 	push(p->get_point().x, p->get_point().y, p);
 	board[old_p.x][old_p.y] = new Element(old_p.x, old_p.y, '.');
-	board[old_p.x][old_p.y]->set_empty(true);
 }
-
-bool Board::check_coordinates(Point& p) {
-	if ((p.x >= 0 && p.x < size) && (p.y >= 0 && p.y < size)) {
-		return true;
-	}
-	return false;
-}
-void Board::set_ground(Point p) {
-	delete board[p.x][p.y];
-	board[p.x][p.y] = new Element(p.x, p.y, '.');
-	board[p.x][p.y]->set_empty(true);
-}
-
-bool Board::other_player(Point p) {
-	if (board[p.x][p.y]->get_symbol() == 'w' || board[p.x][p.y]->get_symbol() == 'v') {
-		return 1;
-	}
-	return 0;
-}
-bool Board::enemy_or_ally(Point& p, Element* element) {
-	char ally, enemy;
-	if (element->get_symbol() == 'w') {
-		ally = 'w';
-		enemy = 'v';
-	}
-	else if (element->get_symbol() == 'v') {
-		ally = 'v';
-		enemy = 'w';
-	}
-	if (board[p.x][p.y]->get_symbol() == ally) {
-		return 0;
-	}
-	else if (board[p.x][p.y]->get_symbol() == enemy) {
-		return 1;
-	}
+void Board::kill(int x, int y) {
+	delete board[x][y];
+	board[x][y] = new Element(x, y, '.');
 }

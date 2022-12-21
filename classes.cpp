@@ -6,6 +6,18 @@ using namespace std;
 
 //////////////////////////////////// struct Point
 Point::Point(int a, int b) : x(a), y(b) {};
+bool Point::near_points(Point p) {
+	if ((this->x == p.x - 1 && this->y == p.y) || (this->x == p.x + 1 && this->y == p.y) || (this->x == p.x && this->y == p.y - 1) || (this->x == p.x && this->y == p.y + 1)) {
+		return true;
+	}
+	return false;
+}
+bool Point::equal(Point& p) {
+	if (this->x == p.x && this->y == p.y) {
+		return true;
+	}
+	return false;
+}
 
 
 
@@ -80,7 +92,7 @@ void Player::set_first_aid_kit(int n) {
 	first_aid_kit = n;
 }
 void Player::initialize() {
-	srand((unsigned)time(NULL));
+	//srand((unsigned)time(NULL));
 
 	int x = rand() % 4;
 	while (x == 0) {
@@ -97,29 +109,36 @@ void Player::initialize() {
 	first_aid_kit = rand() % 3;
 }
 void Player::health_decrease(Player* attacker, Player* defender) {
-	if (defender->get_health() <= attacker->get_power() - defender->get_defence()) {
-		defender->health = 0;
-	}
-	else {
+	//defender->health -= attacker->power - defender->defence;
+	if (attacker->power >= defender->defence) {
 		defender->health -= attacker->power - defender->defence;
 	}
-	//cout << defender->get_symbol() << " attacked\n";
 }
 void Player::health_increase() {
-	if (health < 10 && health > 0)
+	if (health < 5)
 		++health;
 }
 bool Player::move_or_stay() {
 	// true = move, false = stay
-	srand((unsigned)time(NULL));
+	//srand((unsigned)time(NULL));
 	return rand() % 2;
 }
-//void Player::attack(Player* p) {
-//	p->health_decrease(this, p);
-//}
-//void Player::heal(Player* p) {
-//	p->health_increase();
-//}
+bool Player::enemy(Element* p) {
+	if (this->get_symbol() == 'w' && p->get_symbol() == 'v') {
+		return true;
+	}
+	if (this->get_symbol() == 'v' && p->get_symbol() == 'w') {
+		return true;
+	}
+	return false;
+}
+void Player::attack(Player* p) {
+	p->health_decrease(this, p);
+}
+void Player::heal(Player* p) {
+	p->health_increase();
+	--first_aid_kit;
+}
 void Player::move_up() {
 	--point.x;
 }
@@ -149,26 +168,6 @@ void Player::move_SE() {
 	move_right();
 }
 
-void Player::attack_enemy(Player* player, Player* enemy) {
-	if (player->get_power() >= enemy->get_power()) {
-		player->health_decrease(player, enemy);
-	}
-}
-void Player::heal_ally(Player* player, Player* ally) {
-	if (ally->get_health() > 0 && ally->get_health() < 10) {
-		if (player->get_first_aid_kit() != 0 && give_medicine()) {
-			player->first_aid_kit_decrease();
-			ally->health_increase();
-		}
-	}
-	
-}
-void Player::first_aid_kit_decrease() {
-	--first_aid_kit;
-}
-bool Player::give_medicine() {
-	return rand() % 2;
-}
 
 
 //////////////////////////////// class Werewolve

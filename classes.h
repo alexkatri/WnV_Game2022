@@ -9,6 +9,8 @@ struct Point {
 	int y = 0;
 	Point(int, int);
 	Point() {};
+	bool near_points(Point);
+	bool equal(Point&);
 };
 
 class Element {
@@ -52,7 +54,7 @@ public:
 class Player : public Element {
 	int power = 0;
 	int defence = 0;
-	int health = 10;
+	int health = 5;
 	int first_aid_kit = 0;
 public:
 	Player(const Point&, const char);
@@ -64,11 +66,12 @@ public:
 	int get_first_aid_kit() const;
 	void set_first_aid_kit(int);
 	void initialize();				// Arxikopoiei ta epipeda power, defence kai first_aid_kit me tyxaies times
-	//void attack(Player*);			// Gia antipalo paixth
-	//void heal(Player*);				// Gia sympaixth
+	void attack(Player*);			// Gia antipalo paixth
+	void heal(Player*);				// Gia sympaixth
 	void health_decrease(Player*, Player*);
 	void health_increase();
 	bool move_or_stay();
+	bool enemy(Element*);
 	void move_up();
 	void move_down();
 	void move_right();
@@ -77,11 +80,6 @@ public:
 	void move_NE();
 	void move_SW();
 	void move_SE();
-
-	void attack_enemy(Player*, Player*);
-	void heal_ally(Player*, Player*);
-	void first_aid_kit_decrease();
-	bool give_medicine();
 };
 
 class Werewolve : public Player {
@@ -115,17 +113,13 @@ public:
 	Board();
 	//~Board();
 	int get_size() const;
+	Element*** get_board();
 	Element* at(int, int);			// Epistrefei to stoixeio tou board sth thesh (x, y)
 	void push(int, int, Element*);	// Eisagei ena stoixeio sth thesh (x, y) tou board
 	void display() const;
-	bool legal_move(Player*, Point*);
 	bool legal_move(Player*, int, int);
 	void move(Player*, int);
-	bool check_coordinates(Point&);
-	void set_ground(Point);
-	bool other_player(Point);
-	bool enemy_or_ally(Point&, Element*);	// 1 = enemy, 0 = ally
-
+	void kill(int, int);			// Diagrafei to stoixeio apo ton xarth
 };
 
 class State {
@@ -150,17 +144,13 @@ public:
 	void set_board(Board);
 	void set_avatar(Avatar*);
 	void change_timer(string);			// Allazei th mera h th nyxta
+	void print() const;
 	void initialize();					// Dhmiourgei tis ontothtes tou board tyxaia
 	void team_heal(char);				// Epoulwnei ola ta melh ths omadas tou Avatar
 	void avatar_move(int);
-	void state_update(int);
-	//void delete_players(int);
-
-	void scan_area(int);
-	void area_check(Player*);
-	Player* get_player(Point, char);			// returns the player on a specific location
-	Point set_destination(Player*, int);
-	//bool enemy_or_ally(Point&, Element*);	// 1 = enemy, 0 = ally
-	bool is_equal(Point, Point);					// looking for allies and enemies (also healing or attacking if necessary)
-	void print_info(int);
+	void state_update();				// Metakinei tous paixtes
+	bool gameover() const;				// Elegxos gia gameover
+	void key_control(bool&, bool&, char);	// Elegxos tou plhktrologiou
+	void print_info();
+	bool is_health_full(char);			// 1 = not full, 0 = full
 };

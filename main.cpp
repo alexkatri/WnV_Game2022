@@ -12,6 +12,23 @@ using namespace chrono_literals; // for the time pace
 
 
 int main() {
+	
+	// Initial message
+	cout << "\nWelcome...\n";
+	this_thread::sleep_for(1.5s);
+	system("cls");
+	cout << "\nSoon you will have to choose a team...\n\n";
+	this_thread::sleep_for(1s);
+	cout << "Will you be a Werewolf or a Vampire?\n";
+	this_thread::sleep_for(2s);
+	system("cls");
+	cout << "\nYou will have a magic filter on your possession, \nwhich can be used only once, to heal all your team members." << endl << endl;
+	this_thread::sleep_for(3s);
+	cout << "There will also be an additional magic filter on the map...\n";
+	this_thread::sleep_for(1.5s);
+	cout << "Make sure to find it and get it!!!";
+	this_thread::sleep_for(2.5s);
+	system("cls");
 
 	// Dhmiourgia tou board
 	unsigned short int size;
@@ -56,9 +73,27 @@ int main() {
 	}
 	if (ch == 'w') {
 		avatar->set_symbol('W');
+		
+		// screen message
+		system("cls");
+		cout << "\nSo Werewolf it is...\n\n";
+		this_thread::sleep_for(1s);
+		cout << "Be careful..." << endl;
+		this_thread::sleep_for(1s);
+		cout << "You can use the magic filter only at night!!!" << endl;
+		this_thread::sleep_for(2s);
 	}
 	else if (ch == 'v') {
 		avatar->set_symbol('V');
+		
+		// screen message
+		system("cls");
+		cout << "\nSo Vapire it is...\n\n";
+		this_thread::sleep_for(1s);
+		cout << "Be careful..." << endl;
+		this_thread::sleep_for(1s);
+		cout << "You can use the magic filter only at daytime!!!" << endl;
+		this_thread::sleep_for(2s);
 	}
 	b.push(x, y, avatar);
 
@@ -69,6 +104,7 @@ int main() {
 	int num_of_players = size * size / 15;
 	State state = State(b, avatar, num_of_trees, num_of_lakes, num_of_players, num_of_players);
 	state.initialize();		// Dhmiourgia twn ontothtwn tou board
+
 
 
 	bool exit = false;
@@ -89,88 +125,13 @@ int main() {
 			time_then = time_now;
 		}
 
-		// print board
-		system("cls");
-		state.get_board().display();
-		cout << "Time = " << state.get_timer() << endl << endl;
-		cout << "Press 'SPACE' for pause\n";
-		cout << "Press '0' for exit\n";
-		cout << "Press '1' to use magic filter\n";
+		//state.print_info();
+		state.print();
+		state.state_update();
+		state.key_control(exit, pause, ch);
+		if (state.gameover()) exit = true;
 
-		for (int i = 0; i < num_of_players; i++) {
-			state.print_info(i);
-		}
-
-		state.state_update(num_of_players);
-		//state.delete_players(num_of_players);
-		for (int i = 0; i < num_of_players; i++) {
-			state.scan_area(i);
-		}
-
-
-		// Elegxos tou plhktrologiou
-		if (GetKeyState(VK_NUMPAD0) & 0x8000) {  // 0x8000 -> key is
-			exit = true;
-		}
-		if (GetKeyState(VK_SPACE) & 0x8000) {
-			pause = true;
-			system("cls");
-			this_thread::sleep_for(200ms);
-			cout << "GAME PAUSED...\n\n";
-			cout << "Number of active werewolves is: " << state.get_num_of_werewolves() << endl;
-			cout << "Number of active vampires is: " << state.get_num_of_vampires() << endl;
-			cout << "Avatar has " << state.get_avatar()->get_num_of_magic_filters() << " magic filters available" << endl << endl;
-			cout << "Press SPACE to return to game..." << endl;
-			while (pause) {
-				if (GetKeyState(VK_SPACE) & 0x8000) {
-					pause = false;
-				}
-			}
-		}
-		if (GetKeyState(VK_NUMPAD1) & 0x8000) {
-			system("cls");
-			this_thread::sleep_for(200ms);
-			if (state.get_avatar()->get_num_of_magic_filters() > 0) {
-				state.team_heal(ch);
-				this_thread::sleep_for(5s);
-			}
-			else {
-				cout << "Avatar has no magic filters available...\n";
-			}
-		}
-		if (GetKeyState(VK_UP) & 0x8000) {
-			system("cls");
-			state.avatar_move(0);
-		}
-		if (GetKeyState(VK_DOWN) & 0x8000) {
-			system("cls");
-			state.avatar_move(1);
-		}
-		if (GetKeyState(VK_RIGHT) & 0x8000) {
-			system("cls");
-			state.avatar_move(2);
-		}
-		if (GetKeyState(VK_LEFT) & 0x8000) {
-			system("cls");
-			state.avatar_move(3);
-		}
-
-
-		// Elegxos gia gameover
-		if (state.get_num_of_werewolves() == 0) {
-			system("cls");
-			this_thread::sleep_for(1s);
-			cout << "GAME OVER...\n\n" << "VAMPIRES WIN !!!\n\n";
-			exit = true;
-		}
-		if (state.get_num_of_vampires() == 0) {
-			system("cls");
-			this_thread::sleep_for(1s);
-			cout << "GAME OVER...\n\n" << "WEREWOLVES WIN !!!\n\n";
-			exit = true;
-		}
-
-		this_thread::sleep_for(1s);			// for the time pace
+		this_thread::sleep_for(100ms);			// for the time pace
 	}
 
 	delete avatar;
