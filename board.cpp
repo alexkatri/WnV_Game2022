@@ -25,12 +25,6 @@ Board::Board() {
 		}
 	}
 }
-//Board::~Board() {
-//	for (int i = 0; i < size; i++) {
-//		delete[] board[i];
-//	}
-//	delete[] board;
-//}
 int Board::get_size() const {
 	return size;
 }
@@ -147,4 +141,10 @@ void Board::move(Player* p, int i) {
 void Board::kill(int x, int y) {
 	delete board[x][y];
 	board[x][y] = new Element(x, y, '.');
+}
+void Board::board_delete() {
+	for (int i = 0; i < size; i++) {
+		delete[] board[i];
+	}
+	delete[] board;
 }

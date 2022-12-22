@@ -163,9 +163,9 @@ void State::avatar_move(int direction) {
 void State::state_update() {
 	srand((unsigned)time(NULL));
 	for (Werewolve* ptr : werewolves_vector) {
-		Point point = ptr->get_point();
+		Point point = ptr->get_point();			// Arxikh thesh
 		int iterator = 0;
-		for (Vampire* enemy : vampires_vector) {
+		for (Vampire* enemy : vampires_vector) {		// Scan all the enemies, to attack or defence
 			if (point.near_points(enemy->get_point())) {
 				if (ptr->get_power() >= enemy->get_power()) {
 					ptr->attack(enemy);
@@ -304,4 +304,7 @@ void State::key_control(bool& exit, bool& pause, char team) {
 		system("cls");
 		avatar_move(3);
 	}
+}
+void State::state_delete() {
+	board.board_delete();
 }

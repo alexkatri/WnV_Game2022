@@ -111,7 +111,7 @@ class Board {
 public:
 	Board(unsigned short int);
 	Board();
-	//~Board();
+	~Board() {};
 	int get_size() const;
 	Element*** get_board();
 	Element* at(int, int);			// Epistrefei to stoixeio tou board sth thesh (x, y)
@@ -120,6 +120,7 @@ public:
 	bool legal_move(Player*, int, int);
 	void move(Player*, int);
 	void kill(int, int);			// Diagrafei to stoixeio apo ton xarth
+	void board_delete();			// Memory deallocation
 };
 
 class State {
@@ -151,4 +152,5 @@ public:
 	void state_update();				// Metakinei tous paixtes
 	bool gameover() const;				// Elegxos gia gameover
 	void key_control(bool&, bool&, char);	// Elegxos tou plhktrologiou
+	void state_delete();				// Memory deallocation
 };
