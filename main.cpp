@@ -134,6 +134,6 @@ int main() {
 		this_thread::sleep_for(100ms);			// for the time pace
 	}
 
-	delete avatar;
+	state.state_delete();
 	return 0;
 }
