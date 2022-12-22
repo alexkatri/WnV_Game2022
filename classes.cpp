@@ -92,7 +92,7 @@ void Player::set_first_aid_kit(int n) {
 	first_aid_kit = n;
 }
 void Player::initialize() {
-	srand((unsigned)time(NULL));
+	//srand((unsigned)time(NULL));
 
 	int x = rand() % 4;
 	while (x == 0) {
@@ -109,7 +109,10 @@ void Player::initialize() {
 	first_aid_kit = rand() % 3;
 }
 void Player::health_decrease(Player* attacker, Player* defender) {
-	defender->health -= attacker->power - defender->defence;
+	//defender->health -= attacker->power - defender->defence;
+	if (attacker->power >= defender->defence) {
+		defender->health -= attacker->power - defender->defence;
+	}
 }
 void Player::health_increase() {
 	if (health < 5)
@@ -117,7 +120,7 @@ void Player::health_increase() {
 }
 bool Player::move_or_stay() {
 	// true = move, false = stay
-	srand((unsigned)time(NULL));
+	//srand((unsigned)time(NULL));
 	return rand() % 2;
 }
 bool Player::enemy(Element* p) {

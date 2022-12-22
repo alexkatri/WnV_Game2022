@@ -39,10 +39,10 @@ void State::print() const {
 	cout << "Time = " << timer << endl << endl;
 	cout << "Press 'SPACE' for pause\n";
 	cout << "Press '0' for exit\n";
-	cout << "Press '1' to use magic filter\n";
+	cout << "Press '1' to use magic potion\n";
 }
 void State::initialize() {
-	srand((unsigned)time(NULL));
+	//srand((unsigned)time(NULL));
 
 	int x;
 	int y;
@@ -113,24 +113,54 @@ void State::initialize() {
 }
 void State::team_heal(char ch) {
 	if (ch == 'w' && timer == "night") {
-		cout << "Magic filter activated for your team members...\n\n";
-		cout << "Health level to be increased for all the " << ch << "'s...\n\n";
-		for (Werewolve* ptr : werewolves_vector) {
-			ptr->health_increase();
-		}
-		avatar->decrease_magic_filters();
-		cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
-	}
-	else {
-		if (ch == 'v' && timer == "day") {
-			cout << "Magic filter activated for your team members...\n\n";
-			cout << "Health level to be increased for all the " << ch << "'s...\n\n";
-			for (Vampire* ptr : vampires_vector) {
-				ptr->health_increase();
+		if (avatar->get_num_of_magic_filters() > 0) {
+			if (is_health_full('w')) {
+				cout << "Magic potion activated for your team members...\n\n";
+				cout << "Health level to be increased for all the " << ch << "'s...\n\n";
+				for (Werewolve* ptr : werewolves_vector) {
+					ptr->health_increase();
+				}
+				avatar->decrease_magic_filters();
+				cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
 			}
-			avatar->decrease_magic_filters();
-			cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
+			else {
+				cout << "No need to use your magic potion...\n\n";
+				this_thread::sleep_for(0.5s);
+				cout << "All your team members are healthy!\n\n";
+			}
 		}
+		else {
+			cout << "Avatar has no magic potions available...\n";
+			this_thread::sleep_for(2s);
+		}
+		
+	}
+	else if (ch == 'v' && timer == "day") {
+		if (avatar->get_num_of_magic_filters() > 0) {
+			if (is_health_full('v')) {
+				cout << "Magic potion activated for your team members...\n\n";
+				cout << "Health level to be increased for all the " << ch << "'s...\n\n";
+				for (Vampire* ptr : vampires_vector) {
+					ptr->health_increase();
+				}
+				avatar->decrease_magic_filters();
+				cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
+			}
+			else {
+				cout << "No need to use your magic potion...\n\n";
+				this_thread::sleep_for(0.5s);
+				cout << "All your team members are healthy!\n\n";
+			}
+		}
+		else {
+			cout << "Avatar has no magic potions available...\n";
+			this_thread::sleep_for(2s);
+		}
+
+	}
+	else if ((ch == 'w' && timer == "day") || (ch == 'v' && timer == "night")) {
+		cout << "You can't use the magic potion now\n";
+		cout << "It's still " << timer << "..." << endl;
 	}
 }
 void State::avatar_move(int direction) {
@@ -161,11 +191,11 @@ void State::avatar_move(int direction) {
 	board.move(avatar, direction);
 }
 void State::state_update() {
-	srand((unsigned)time(NULL));
+	//srand((unsigned)time(NULL));
 	for (Werewolve* ptr : werewolves_vector) {
-		Point point = ptr->get_point();			// Arxikh thesh
+		Point point = ptr->get_point();
 		int iterator = 0;
-		for (Vampire* enemy : vampires_vector) {		// Scan all the enemies, to attack or defence
+		for (Vampire* enemy : vampires_vector) {      		// Scan all the enemies, to attack or defence
 			if (point.near_points(enemy->get_point())) {
 				if (ptr->get_power() >= enemy->get_power()) {
 					ptr->attack(enemy);
@@ -201,7 +231,7 @@ void State::state_update() {
 			board.move(ptr, rand() % 4);
 		}
 	}
-	
+
 
 	for (Vampire* ptr : vampires_vector) {
 		Point point = ptr->get_point();
@@ -214,7 +244,7 @@ void State::state_update() {
 						werewolves_vector.erase(werewolves_vector.begin() + iterator);
 						--num_of_werewolves;
 						board.kill(enemy->get_point().x, enemy->get_point().y);
-						cout << "\n\n\nwerewolve killed...";
+						cout << "\n\n\nwerewolf killed...";
 						this_thread::sleep_for(1s);
 					}
 				}
@@ -248,12 +278,26 @@ bool State::gameover() const {
 		system("cls");
 		this_thread::sleep_for(1s);
 		cout << "GAME OVER...\n\n" << "VAMPIRES WIN !!!\n\n";
+		this_thread::sleep_for(100ms);
+		if (avatar->get_symbol() == 'V') {
+			cout << "YOU WIN :)\n\n";
+		}
+		else {
+			cout << "YOU LOSE :(\n\n";
+		}
 		return true;
 	}
 	if (num_of_vampires == 0) {
 		system("cls");
 		this_thread::sleep_for(1s);
 		cout << "GAME OVER...\n\n" << "WEREWOLVES WIN !!!\n\n";
+		this_thread::sleep_for(100ms);
+		if (avatar->get_symbol() == 'W') {
+			cout << "YOU WIN :)\n\n";
+		}
+		else {
+			cout << "YOU LOSE :(\n\n";
+		}
 		return true;
 	}
 	return false;
@@ -269,7 +313,8 @@ void State::key_control(bool& exit, bool& pause, char team) {
 		cout << "\n\n\nGAME PAUSED...\n\n";
 		cout << "Number of active werewolves is: " << num_of_werewolves << endl;
 		cout << "Number of active vampires is: " << num_of_vampires << endl;
-		cout << "Avatar has " << avatar->get_num_of_magic_filters() << " magic filters available" << endl << endl;
+		cout << "Avatar has " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
+		print_info();
 		cout << "Press SPACE to return to game..." << endl;
 		while (pause) {
 			if (GetKeyState(VK_SPACE) & 0x8000) {
@@ -280,13 +325,8 @@ void State::key_control(bool& exit, bool& pause, char team) {
 	if (GetKeyState(VK_NUMPAD1) & 0x8000) {
 		system("cls");
 		this_thread::sleep_for(200ms);
-		if (avatar->get_num_of_magic_filters() > 0) {
-			team_heal(team);
-			this_thread::sleep_for(5s);
-		}
-		else {
-			cout << "Avatar has not magic filters available...\n";
-		}
+		team_heal(team);
+		this_thread::sleep_for(3s);
 	}
 	if (GetKeyState(VK_UP) & 0x8000) {
 		system("cls");
@@ -304,6 +344,42 @@ void State::key_control(bool& exit, bool& pause, char team) {
 		system("cls");
 		avatar_move(3);
 	}
+}
+
+void State::print_info() {
+	cout << "Werewolves: \n";
+	for (int i = 0; i < num_of_werewolves; i++) {
+		cout << i << ". health: " << werewolves_vector[i]->get_health() << "\tpower: " << werewolves_vector[i]->get_power() << "\tdefence: " << werewolves_vector[i]->get_defence() << "\tfirst aid kit: " << werewolves_vector[i]->get_first_aid_kit();
+		cout << endl;
+	}
+	cout << endl << "Vampires: \n";
+	for (int i = 0; i < num_of_vampires; i++) {
+		cout << i << ". health: " << vampires_vector[i]->get_health() << "\tpower: " << vampires_vector[i]->get_power() << "\tdefence: " << vampires_vector[i]->get_defence() << "\tfirst aid kit: " << vampires_vector[i]->get_first_aid_kit();
+		cout << endl;
+	}
+	cout << endl;
+} 
+
+bool State::is_health_full(char ch) {
+	if (ch == 'v') {
+		for (Vampire* ptr : vampires_vector) {
+			if (ptr->get_health() < 5) {
+				return 1;
+				break;
+			}
+
+		}
+		
+	}
+	if (ch == 'w') {
+		for (Werewolve* ptr : werewolves_vector) {
+			if (ptr->get_health() < 5) {
+				return 1;
+				break;
+			}
+		}
+	}
+	return 0;
 }
 void State::state_delete() {
 	board.board_delete();

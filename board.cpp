@@ -126,7 +126,7 @@ void Board::move(Player* p, int i) {
 			return;
 		}
 	case 7: // SE
-		if (legal_move(p, old_p.x +1, old_p.y + 1)) {
+		if (legal_move(p, old_p.x + 1, old_p.y + 1)) {
 			p->move_SE();
 			break;
 		}
