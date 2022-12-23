@@ -120,7 +120,7 @@ public:
 	bool legal_move(Player*, int, int);
 	void move(Player*, int);
 	void kill(int, int);			// Diagrafei to stoixeio apo ton xarth
-  void board_delete();			// Memory deallocation
+	void board_delete();			// Memory deallocation
 };
 
 class State {
@@ -154,6 +154,5 @@ public:
 	void key_control(bool&, bool&, char);	// Elegxos tou plhktrologiou
 	void print_info();
 	bool is_health_full(char);			// 1 = not full, 0 = full
-  void state_delete();				// Memory deallocation
-
+	void state_delete();				// Memory deallocation
 };
