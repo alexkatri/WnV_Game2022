@@ -1,7 +1,7 @@
 #include <iostream>
-#include <windows.h>   // for keyboard input (windows)
-#include <chrono>	// for the time pace
-#include <thread>	// for the time pace
+#include <windows.h>	// for keyboard input (windows)
+#include <chrono>		// for the time pace
+#include <thread>		// for the time pace
 #include <cstdlib>
 #include "classes.h"
 
@@ -12,26 +12,27 @@ using namespace chrono_literals; // for the time pace
 
 
 int main() {
-	
+
 	// Initial message
 	cout << "\nWelcome...\n";
 	this_thread::sleep_for(1.5s);
 	system("cls");
 	cout << "\nSoon you will have to choose a team...\n\n";
-	this_thread::sleep_for(1s);
-	cout << "Will you be a Werewolf or a Vampire?\n";
 	this_thread::sleep_for(2s);
+	cout << "Will you be a Werewolf or a Vampire?\n";
+	this_thread::sleep_for(3s);
 	system("cls");
 	cout << "\nYou will have a magic potion on your possession, \nwhich can be used only once, to heal all your team members." << endl << endl;
-	this_thread::sleep_for(3s);
+	this_thread::sleep_for(4s);
 	cout << "There will also be an additional magic potion on the map...\n";
-	this_thread::sleep_for(1.5s);
+	this_thread::sleep_for(2s);
 	cout << "Make sure to find it and get it!!!";
-	this_thread::sleep_for(2.5s);
+	this_thread::sleep_for(3s);
 	system("cls");
 
 	// Dhmiourgia tou board
 	unsigned short int size;
+	cout << endl;
 	cout << "Give board size... (10 - 20)\n";
 	bool valid = false;
 	while (!valid) {
@@ -57,7 +58,7 @@ int main() {
 	Avatar* avatar = new Avatar(x, y);
 	cout << "Choose your team...\n";
 	cout << "Press 'w' for werewolves or 'v' for vampires...\n";
-	char ch;				// Exei to xarakthra 'w' h 'v' analoga me thn omada pou uposrthrizei o avatar
+	char ch;							// Exei to xarakthra 'w' h 'v' analoga me thn omada pou uposrthrizei o avatar
 	valid = false;
 	while (!valid) {
 		try {
@@ -73,27 +74,27 @@ int main() {
 	}
 	if (ch == 'w') {
 		avatar->set_symbol('W');
-		
+
 		// screen message
 		system("cls");
 		cout << "\nSo Werewolf it is...\n\n";
-		this_thread::sleep_for(1s);
+		this_thread::sleep_for(1.5s);
 		cout << "Be careful..." << endl;
 		this_thread::sleep_for(1s);
 		cout << "You can use the magic potion only at night!!!" << endl;
-		this_thread::sleep_for(2s);
+		this_thread::sleep_for(4s);
 	}
 	else if (ch == 'v') {
 		avatar->set_symbol('V');
-		
+
 		// screen message
 		system("cls");
 		cout << "\nSo Vapire it is...\n\n";
-		this_thread::sleep_for(1s);
+		this_thread::sleep_for(1.5s);
 		cout << "Be careful..." << endl;
 		this_thread::sleep_for(1s);
 		cout << "You can use the magic potion only at daytime!!!" << endl;
-		this_thread::sleep_for(2s);
+		this_thread::sleep_for(4s);
 	}
 	b.push(x, y, avatar);
 
@@ -103,7 +104,7 @@ int main() {
 	int num_of_lakes = size / 4;
 	int num_of_players = size * size / 15;
 	State state = State(b, avatar, num_of_trees, num_of_lakes, num_of_players, num_of_players);
-	state.initialize();		// Dhmiourgia twn ontothtwn tou board
+	state.initialize();			// Dhmiourgia twn ontothtwn tou board
 
 
 
@@ -125,7 +126,6 @@ int main() {
 			time_then = time_now;
 		}
 
-		//state.print_info();
 		state.print();
 		state.state_update();
 		state.key_control(exit, pause, ch);

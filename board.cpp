@@ -6,7 +6,7 @@
 using namespace std;
 
 
-////////////////////////////// class Board
+//////////////////////////////////// class Board
 Board::Board(unsigned short int n) : size(n) {
 	board = new Element * *[n];
 	for (int i = 0; i < n; i++) {
@@ -25,15 +25,25 @@ Board::Board() {
 		}
 	}
 }
+
 int Board::get_size() const {
 	return size;
 }
+
 Element*** Board::get_board() {
 	return board;
 }
+
 Element* Board::at(int x, int y) {
 	return board[x][y];
 }
+
+void Board::push(int x, int y, Element* element) {
+	delete board[x][y];
+	board[x][y] = element;
+	board[x][y]->set_empty(false);
+}
+
 void Board::display() const {
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
@@ -43,11 +53,7 @@ void Board::display() const {
 	}
 	cout << endl << endl;
 }
-void Board::push(int x, int y, Element* element) {
-	delete board[x][y];
-	board[x][y] = element;
-	board[x][y]->set_empty(false);
-}
+
 bool Board::legal_move(Player* p, int x, int y) {
 	// Point p is out of board
 	if (x < 0 || x >= size || y < 0 || y >= size) {
@@ -66,6 +72,7 @@ bool Board::legal_move(Player* p, int x, int y) {
 	}
 	return false;
 }
+
 void Board::move(Player* p, int i) {
 	Point old_p = p->get_point();
 	switch (i) {
@@ -138,10 +145,12 @@ void Board::move(Player* p, int i) {
 	push(p->get_point().x, p->get_point().y, p);
 	board[old_p.x][old_p.y] = new Element(old_p.x, old_p.y, '.');
 }
+
 void Board::kill(int x, int y) {
 	delete board[x][y];
 	board[x][y] = new Element(x, y, '.');
 }
+
 void Board::board_delete() {
 	for (int i = 0; i < size; i++) {
 		delete[] board[i];
