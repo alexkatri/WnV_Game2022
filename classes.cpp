@@ -6,6 +6,8 @@ using namespace std;
 
 //////////////////////////////////// struct Point
 Point::Point(int a, int b) : x(a), y(b) {};
+
+
 bool Point::near_points(Point p) {
 	if ((this->x == p.x - 1 && this->y == p.y) || (this->x == p.x + 1 && this->y == p.y) || (this->x == p.x && this->y == p.y - 1) || (this->x == p.x && this->y == p.y + 1)) {
 		return true;
@@ -21,10 +23,12 @@ bool Point::equal(Point& p) {
 
 
 
-/////////////////////////////////// base class Element
+//////////////////////////////////// base class Element
 Element::Element(const Point& p, const char c) : point(p), symbol(c), empty(true) {};
 Element::Element(int x, int y, char c) : point(x, y), symbol(c), empty(true) {};
 Element::Element() : point(0, 0), symbol('.'), empty(true) {};
+
+
 void Element::set_point(const Point& p) {
 	point = p;
 }
@@ -34,29 +38,37 @@ void Element::set_symbol(char c) {
 void Element::set_empty(bool b) {
 	empty = b;
 }
+
+
 Point Element::get_point() const {
 	return point;
 }
 char Element::get_symbol() const {
 	return symbol;
 }
+
+
 bool Element::is_empty() const {
 	return empty;
 }
 
 
-/////////////////////////////////////// classes Tree, Lake, Magic_filter
+
+//////////////////////////////////// classes Tree, Lake, Magic_filter
 Tree::Tree() : Element() {
 	set_symbol('T');
 }
 Tree::Tree(const Point& p) : Element(p, 'T') {};
 Tree::Tree(int x, int y) : Element(x, y, 'T') {};
 
+
 Lake::Lake() : Element() {
 	set_symbol('O');
 }
 Lake::Lake(const Point& p) : Element(p, 'O') {};
 Lake::Lake(int x, int y) : Element(x, y, 'O') {};
+
+
 Magic_filter::Magic_filter() : Element() {
 	set_symbol('$');
 }
@@ -65,7 +77,7 @@ Magic_filter::Magic_filter(int x, int y) : Element(x, y, '$') {};
 
 
 
-/////////////////////////////////// class Player
+//////////////////////////////////// class Player
 Player::Player(const Point& p, const char c) : Element(p, c) {
 	initialize();
 };
@@ -76,6 +88,8 @@ Player::Player() : Element() {
 	set_symbol('P');
 	initialize();
 }
+
+
 int Player::get_health() const {
 	return health;
 }
@@ -88,28 +102,42 @@ int Player::get_defence() const {
 int Player::get_first_aid_kit() const {
 	return first_aid_kit;
 }
+
+
 void Player::set_first_aid_kit(int n) {
 	first_aid_kit = n;
 }
-void Player::initialize() {
-	//srand((unsigned)time(NULL));
 
+
+void Player::initialize() {
+	
+	// setting the power
 	int x = rand() % 4;
 	while (x == 0) {
 		x = rand() % 4;
 	}
 	power = x;
 
+	// setting the defence
 	int y = rand() % 3;
 	while (y == 0) {
 		y = rand() % 3;
 	}
 	defence = y;
 
+	// setting the first aid kit
 	first_aid_kit = rand() % 3;
 }
+
+
+void Player::attack(Player* p) {
+	p->health_decrease(this, p);
+}
+void Player::heal(Player* p) {
+	p->health_increase();
+	--first_aid_kit;
+}
 void Player::health_decrease(Player* attacker, Player* defender) {
-	//defender->health -= attacker->power - defender->defence;
 	if (attacker->power >= defender->defence) {
 		defender->health -= attacker->power - defender->defence;
 	}
@@ -118,9 +146,9 @@ void Player::health_increase() {
 	if (health < 5)
 		++health;
 }
+
+
 bool Player::move_or_stay() {
-	// true = move, false = stay
-	//srand((unsigned)time(NULL));
 	return rand() % 2;
 }
 bool Player::enemy(Element* p) {
@@ -132,13 +160,8 @@ bool Player::enemy(Element* p) {
 	}
 	return false;
 }
-void Player::attack(Player* p) {
-	p->health_decrease(this, p);
-}
-void Player::heal(Player* p) {
-	p->health_increase();
-	--first_aid_kit;
-}
+
+
 void Player::move_up() {
 	--point.x;
 }
@@ -170,17 +193,23 @@ void Player::move_SE() {
 
 
 
-//////////////////////////////// class Werewolve
+//////////////////////////////////// class Werewolve
 Werewolve::Werewolve(int x, int y) : Player(x, y, 'w') {};
 Werewolve::Werewolve() : Player() {};
 
-//////////////////////////////// class Vampire
+
+
+//////////////////////////////////// class Vampire
 Vampire::Vampire(int x, int y) : Player(x, y, 'v') {};
 Vampire::Vampire() : Player() {};
 
-//////////////////////////////// class Avatar
+
+
+//////////////////////////////////// class Avatar
 Avatar::Avatar(int x, int y) : Player(x, y, 'A') {};
 Avatar::Avatar() : Player() {};
+
+
 int Avatar::get_num_of_magic_filters() const {
 	return num_of_magic_filters;
 }

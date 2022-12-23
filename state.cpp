@@ -1,14 +1,16 @@
 #include <iostream>
 #include "classes.h"
 #include <cstdlib>
-#include <thread>	// for the time pace
-#include <windows.h>   // for keyboard input (windows)
+#include <thread>		// for the time pace
+#include <windows.h>	// for keyboard input (windows)
 
 using namespace std;
 
-/////////////////////////////////////////////////
+//////////////////////////////////// class State
 State::State(Board& b, Avatar* a, int x, int y, int w, int v) : board(b), avatar(a), num_of_trees(x), num_of_lakes(y), num_of_werewolves(w), num_of_vampires(v) {};
 State::State(Board& b) : board(b), num_of_trees(0), num_of_lakes(0), num_of_werewolves(0), num_of_vampires(0) {};
+
+
 Board State::get_board() const {
 	return board;
 }
@@ -24,12 +26,16 @@ int State::get_num_of_vampires() const {
 string State::get_timer() const {
 	return timer;
 }
+
+
 void State::set_board(Board B) {
 	board = B;
 }
 void State::set_avatar(Avatar* A) {
 	avatar = A;
 }
+
+
 void State::change_timer(string s) {
 	timer = s;
 }
@@ -42,11 +48,11 @@ void State::print() const {
 	cout << "Press '1' to use magic potion\n";
 }
 void State::initialize() {
-	//srand((unsigned)time(NULL));
-
 	int x;
 	int y;
 	bool exit = false;
+
+	// Placing the magic potion
 	while (!exit) {
 		x = rand() % (board.get_size());
 		y = rand() % (board.get_size());
@@ -57,6 +63,7 @@ void State::initialize() {
 		}
 	}
 
+	// Placing the werewolves
 	for (int i = 0; i < num_of_werewolves; i++) {
 		bool exit = false;
 		while (!exit) {
@@ -71,6 +78,7 @@ void State::initialize() {
 		}
 	}
 
+	// Placing the vampires
 	for (int i = 0; i < num_of_vampires; i++) {
 		bool exit = false;
 		while (!exit) {
@@ -85,6 +93,7 @@ void State::initialize() {
 		}
 	}
 
+	// Placing the trees
 	for (int i = 0; i < num_of_trees; i++) {
 		bool exit = false;
 		while (!exit) {
@@ -98,6 +107,7 @@ void State::initialize() {
 		}
 	}
 
+	// Placing the lakes
 	for (int i = 0; i < num_of_lakes; i++) {
 		bool exit = false;
 		while (!exit) {
@@ -114,51 +124,58 @@ void State::initialize() {
 void State::team_heal(char ch) {
 	if (ch == 'w' && timer == "night") {
 		if (avatar->get_num_of_magic_filters() > 0) {
-			if (is_health_full('w')) {
+			if (is_health_full('w')) {					// An den einai full h ugeia, tote epoulwnei ola ta melh ths omadas
+				cout << endl;
 				cout << "Magic potion activated for your team members...\n\n";
 				cout << "Health level to be increased for all the " << ch << "'s...\n\n";
 				for (Werewolve* ptr : werewolves_vector) {
 					ptr->health_increase();
 				}
 				avatar->decrease_magic_filters();
-				cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
+				cout << "You now have " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
 			}
-			else {
+			else {										// An einai full h ugeia, emfanizetai mhnuma oti ola ta melh einai healthy
+				cout << endl;
 				cout << "No need to use your magic potion...\n\n";
 				this_thread::sleep_for(0.5s);
 				cout << "All your team members are healthy!\n\n";
 			}
 		}
 		else {
-			cout << "Avatar has no magic potions available...\n";
+			cout << endl;
+			cout << "You have no magic potions available...\n";
 			this_thread::sleep_for(2s);
 		}
-		
+
 	}
 	else if (ch == 'v' && timer == "day") {
 		if (avatar->get_num_of_magic_filters() > 0) {
-			if (is_health_full('v')) {
+			if (is_health_full('v')) {					// An den einai full h ugeia, tote epoulwnei ola ta melh ths omadas
+				cout << endl;
 				cout << "Magic potion activated for your team members...\n\n";
 				cout << "Health level to be increased for all the " << ch << "'s...\n\n";
 				for (Vampire* ptr : vampires_vector) {
 					ptr->health_increase();
 				}
 				avatar->decrease_magic_filters();
-				cout << "Avatar now has " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
+				cout << "You now have " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
 			}
-			else {
+			else {										// An einai full h ugeia, emfanizetai mhnuma oti ola ta melh einai healthy
+				cout << endl;
 				cout << "No need to use your magic potion...\n\n";
 				this_thread::sleep_for(0.5s);
 				cout << "All your team members are healthy!\n\n";
 			}
 		}
 		else {
-			cout << "Avatar has no magic potions available...\n";
+			cout << endl;
+			cout << "You have no magic potions available...\n";
 			this_thread::sleep_for(2s);
 		}
 
 	}
 	else if ((ch == 'w' && timer == "day") || (ch == 'v' && timer == "night")) {
+		cout << endl;
 		cout << "You can't use the magic potion now\n";
 		cout << "It's still " << timer << "..." << endl;
 	}
@@ -184,19 +201,26 @@ void State::avatar_move(int direction) {
 		break;
 	}
 	if (board.legal_move(avatar, new_p.x, new_p.y)) {
-		if (board.at(new_p.x, new_p.y)->get_symbol() == '$') {
+		if (board.at(new_p.x, new_p.y)->get_symbol() == '$') {		// Avatar found the magic potion
 			avatar->increase_magic_filters();
+			this_thread::sleep_for(100ms);
+			cout << endl;
+			cout << "Magic potion acquired\n";
+			this_thread::sleep_for(2s);
 		}
 	}
 	board.move(avatar, direction);
 }
 void State::state_update() {
-	//srand((unsigned)time(NULL));
+
+	// Werewolves
 	for (Werewolve* ptr : werewolves_vector) {
 		Point point = ptr->get_point();
 		int iterator = 0;
-		for (Vampire* enemy : vampires_vector) {      		// Scan all the enemies, to attack or defence
-			if (point.near_points(enemy->get_point())) {
+
+		// Scan for enemies
+		for (Vampire* enemy : vampires_vector) {      			// Scan all the enemies, to attack or defence
+			if (point.near_points(enemy->get_point())) {		// Finding the enemies near the werewolf
 				if (ptr->get_power() >= enemy->get_power()) {
 					ptr->attack(enemy);
 					if (enemy->get_health() <= 0) {
@@ -216,9 +240,10 @@ void State::state_update() {
 			iterator++;
 		}
 
-		for (Werewolve* ptr2 : werewolves_vector) {
+		// Scan for allies
+		for (Werewolve* ptr2 : werewolves_vector) {				// Scan all the allies, to heal or not
 			if (ptr2 == ptr) continue;
-			if (point.near_points(ptr2->get_point())) {
+			if (point.near_points(ptr2->get_point())) {			// Finding the allies near the werewolf
 				if (ptr2->get_health() < 5 && ptr->get_first_aid_kit() > 0) {
 					if (rand() % 2) {
 						ptr->heal(ptr2);
@@ -227,17 +252,20 @@ void State::state_update() {
 			}
 		}
 
+		// Moving the werewolf
 		if (ptr->move_or_stay()) {
 			board.move(ptr, rand() % 4);
 		}
 	}
 
-
+	// Vampires
 	for (Vampire* ptr : vampires_vector) {
 		Point point = ptr->get_point();
 		int iterator = 0;
-		for (Werewolve* enemy : werewolves_vector) {
-			if (point.near_points(enemy->get_point())) {
+
+		// Scan for enemies
+		for (Werewolve* enemy : werewolves_vector) {			// Scan all the enemies, to attack or defence
+			if (point.near_points(enemy->get_point())) {		// Finding the enemies near the vampire
 				if (ptr->get_power() >= enemy->get_power()) {
 					ptr->attack(enemy);
 					if (enemy->get_health() <= 0) {
@@ -257,9 +285,10 @@ void State::state_update() {
 			iterator++;
 		}
 
-		for (Vampire* ptr2 : vampires_vector) {
+		// Scan for allies
+		for (Vampire* ptr2 : vampires_vector) {					// Scan all the allies, to heal or not
 			if (ptr2 == ptr) continue;
-			if (point.near_points(ptr2->get_point())) {
+			if (point.near_points(ptr2->get_point())) {			// Finding the allies near the vampire
 				if (ptr2->get_health() < 5 && ptr->get_first_aid_kit() > 0) {
 					if (rand() % 2) {
 						ptr->heal(ptr2);
@@ -268,6 +297,7 @@ void State::state_update() {
 			}
 		}
 
+		// Moving the vampire
 		if (ptr->move_or_stay()) {
 			board.move(ptr, rand() % 8);
 		}
@@ -277,6 +307,7 @@ bool State::gameover() const {
 	if (num_of_werewolves == 0) {
 		system("cls");
 		this_thread::sleep_for(1s);
+		cout << endl;
 		cout << "GAME OVER...\n\n" << "VAMPIRES WIN !!!\n\n";
 		this_thread::sleep_for(100ms);
 		if (avatar->get_symbol() == 'V') {
@@ -290,6 +321,7 @@ bool State::gameover() const {
 	if (num_of_vampires == 0) {
 		system("cls");
 		this_thread::sleep_for(1s);
+		cout << endl;
 		cout << "GAME OVER...\n\n" << "WEREWOLVES WIN !!!\n\n";
 		this_thread::sleep_for(100ms);
 		if (avatar->get_symbol() == 'W') {
@@ -313,7 +345,7 @@ void State::key_control(bool& exit, bool& pause, char team) {
 		cout << "\n\n\nGAME PAUSED...\n\n";
 		cout << "Number of active werewolves is: " << num_of_werewolves << endl;
 		cout << "Number of active vampires is: " << num_of_vampires << endl;
-		cout << "Avatar has " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
+		cout << "You have " << avatar->get_num_of_magic_filters() << " magic potions available" << endl << endl;
 		print_info();
 		cout << "Press SPACE to return to game..." << endl;
 		while (pause) {
@@ -349,16 +381,16 @@ void State::key_control(bool& exit, bool& pause, char team) {
 void State::print_info() {
 	cout << "Werewolves: \n";
 	for (int i = 0; i < num_of_werewolves; i++) {
-		cout << i << ". health: " << werewolves_vector[i]->get_health() << "\tpower: " << werewolves_vector[i]->get_power() << "\tdefence: " << werewolves_vector[i]->get_defence() << "\tfirst aid kit: " << werewolves_vector[i]->get_first_aid_kit();
+		cout << i+1 << ". \thealth: " << werewolves_vector[i]->get_health() << "\tpower: " << werewolves_vector[i]->get_power() << "\tdefence: " << werewolves_vector[i]->get_defence() << "\tfirst aid kit: " << werewolves_vector[i]->get_first_aid_kit();
 		cout << endl;
 	}
 	cout << endl << "Vampires: \n";
 	for (int i = 0; i < num_of_vampires; i++) {
-		cout << i << ". health: " << vampires_vector[i]->get_health() << "\tpower: " << vampires_vector[i]->get_power() << "\tdefence: " << vampires_vector[i]->get_defence() << "\tfirst aid kit: " << vampires_vector[i]->get_first_aid_kit();
+		cout << i+1 << ". \thealth: " << vampires_vector[i]->get_health() << "\tpower: " << vampires_vector[i]->get_power() << "\tdefence: " << vampires_vector[i]->get_defence() << "\tfirst aid kit: " << vampires_vector[i]->get_first_aid_kit();
 		cout << endl;
 	}
 	cout << endl;
-} 
+}
 
 bool State::is_health_full(char ch) {
 	if (ch == 'v') {
@@ -369,7 +401,7 @@ bool State::is_health_full(char ch) {
 			}
 
 		}
-		
+
 	}
 	if (ch == 'w') {
 		for (Werewolve* ptr : werewolves_vector) {
